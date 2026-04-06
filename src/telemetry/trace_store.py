@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict
 
 
@@ -10,7 +10,7 @@ class TraceStore:
         os.makedirs(self.base_dir, exist_ok=True)
 
     def create_trace(self, version: str, user_query: str, session_id: str | None = None) -> Dict[str, Any]:
-        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
         return {
             "trace_id": f"trace_{timestamp}",
             "version": version,

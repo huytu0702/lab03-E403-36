@@ -1,8 +1,9 @@
-import time
 import os
-from typing import Dict, Any, Optional, Generator
-from llama_cpp import Llama
+import time
+from typing import Any, Dict, Generator, Optional
+
 from src.core.llm_provider import LLMProvider
+
 
 class LocalProvider(LLMProvider):
     """
@@ -18,16 +19,22 @@ class LocalProvider(LLMProvider):
             n_threads: Number of CPU threads to use. Defaults to all available.
         """
         super().__init__(model_name=os.path.basename(model_path))
-        
+
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at {model_path}. Please download it first.")
 
-        # n_threads=None will use all available cores
+        try:
+            from llama_cpp import Llama
+        except ModuleNotFoundError as exc:
+            raise ModuleNotFoundError(
+                "llama_cpp is not installed. Run `pip install -r requirements-local.txt` before using DEFAULT_PROVIDER=local."
+            ) from exc
+
         self.llm = Llama(
             model_path=model_path,
             n_ctx=n_ctx,
             n_threads=n_threads,
-            verbose=False
+            verbose=False,
         )
 
     def generate(self, prompt: str, system_prompt: Optional[str] = None) -> Dict[str, Any]:

@@ -1,7 +1,7 @@
-import logging
 import json
+import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict
 
 class IndustryLogger:
@@ -31,9 +31,9 @@ class IndustryLogger:
     def log_event(self, event_type: str, data: Dict[str, Any]):
         """Logs an event with a timestamp and type."""
         payload = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "event": event_type,
-            "data": data
+            "data": data,
         }
         self.logger.info(json.dumps(payload))
 

@@ -47,6 +47,23 @@ Quick scripts:
 - Windows PowerShell: `./scripts/run_frontend.ps1`
 - macOS/Linux: `./scripts/run_frontend.sh`
 
+### ✅ Quick Check for Phase 6-9
+If Docker/Postgres is not available yet, the app will automatically fall back to bundled seed data (`fallback-seed`) so you can still demo locally.
+
+Useful checks:
+```bash
+# API smoke test
+pytest -q
+
+# 5-case benchmark for v1 vs v2
+python scripts/run_benchmark.py
+```
+
+What to expect:
+- `/api/v1/health` returns `status: ok`
+- `streamlit_app.py` shows compare mode, history, and metrics summary
+- `logs/benchmarks/benchmark_latest.json` is generated after running the benchmark
+
 ### 3. Directory Structure
 - `src/tools/`: Extension point for your custom tools.
 

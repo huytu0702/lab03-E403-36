@@ -6,6 +6,7 @@ from src.db.session import SessionLocal
 from src.services.faq_service import faq_service
 from src.services.product_service import product_service
 from src.telemetry.logger import logger
+from src.telemetry.metrics import tracker
 from src.telemetry.trace_store import trace_store
 
 
@@ -17,6 +18,10 @@ class BaselineChatbot:
         started_at = time.time()
         trace = trace_store.create_trace(version="v1", user_query=user_input, session_id=session_id)
         logger.log_event("CHATBOT_REQUEST_RECEIVED", {"trace_id": trace["trace_id"], "input": user_input})
+
+        provider_name = "rule-based"
+        model_name = "grounded-retrieval"
+        usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
 
         db = SessionLocal()
         try:
@@ -59,6 +64,15 @@ class BaselineChatbot:
                             "hãy hỏi lại 1-2 câu để làm rõ thay vì suy đoán."
                         ),
                     )
+                    tracker.track_request(
+                        provider=generated.get("provider", "unknown"),
+                        model=self.llm.model_name,
+                        usage=generated.get("usage"),
+                        latency_ms=generated.get("latency_ms", 0),
+                    )
+                    provider_name = generated.get("provider", "unknown")
+                    model_name = self.llm.model_name
+                    usage = generated.get("usage") or usage
                     answer = generated["content"]
         finally:
             db.close()
@@ -68,7 +82,14 @@ class BaselineChatbot:
             trace,
             final_answer=answer,
             status="success",
-            metrics={"latency_ms": latency_ms, "tool_calls_count": 0, "steps": 1},
+            metrics={
+                "latency_ms": latency_ms,
+                "tool_calls_count": 0,
+                "steps": 1,
+                "provider": provider_name,
+                "model": model_name,
+                **usage,
+            },
         )
         logger.log_event("CHATBOT_FINAL", {"trace_id": trace["trace_id"], "latency_ms": latency_ms})
         return {

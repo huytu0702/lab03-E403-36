@@ -8,6 +8,7 @@ from src.core.config import get_settings
 from src.core.llm_provider import LLMProvider
 from src.core.provider_factory import build_provider
 from src.telemetry.logger import logger
+from src.telemetry.metrics import tracker
 from src.telemetry.trace_store import trace_store
 
 
@@ -31,34 +32,38 @@ class ReActAgent:
         steps = 0
         scratchpad = f"User: {user_input}\n"
         system_prompt = self.get_system_prompt()
+        provider_name = "unknown"
+        total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
 
         while steps < self.max_steps:
             steps += 1
             logger.log_event("AGENT_STEP_STARTED", {"trace_id": trace["trace_id"], "step": steps})
-            
+
             try:
                 response = self.llm.generate(prompt=scratchpad, system_prompt=system_prompt)
                 text = response["content"]
-                
+                provider_name = response.get("provider", provider_name)
+                usage = response.get("usage") or {}
+                for key in total_usage:
+                    total_usage[key] += int(usage.get(key, 0) or 0)
+                tracker.track_request(provider=provider_name, model=self.llm.model_name, usage=usage, latency_ms=response.get("latency_ms", 0))
+
                 try:
                     parsed = parse_react_response(text)
                 except Exception as exc:
-                    # Parsing threw exception (e.g., ValueError for bad JSON)
                     observation = f"System Error parsing your response: {str(exc)}. Please strictly use valid JSON in 'Action Input'."
                     scratchpad += f"{text}\nObservation: {observation}\n"
-                    # Log the failed step
                     trace_store.append_step(trace, {"step": steps, "thought": text, "action": None, "observation": observation})
                     continue
-                
+
                 thought = parsed.get("thought")
                 action = parsed.get("action")
                 final_answer = parsed.get("final_answer")
-                
+
                 if final_answer:
-                    # LLM has provided the final answer
                     trace_store.append_step(trace, {"step": steps, "thought": thought, "action": None, "observation": final_answer})
-                    return self._finalize(trace, final_answer, started_at, steps, tool_calls, "success", None)
-                    
+                    return self._finalize(trace, final_answer, started_at, steps, tool_calls, "success", None, provider_name, total_usage)
+
                 if action:
                     tool_name, args = action
                     has_error = False
@@ -69,7 +74,7 @@ class ReActAgent:
                         result = f"Error executing tool {tool_name}: {str(exc)}"
                         observation = result
                         has_error = True
-                        
+
                     trace_store.append_step(
                         trace,
                         {
@@ -79,27 +84,24 @@ class ReActAgent:
                             "observation": result,
                         },
                     )
-                    
+
                     if not has_error:
                         tool_calls.append({"tool": tool_name, "args": args, "result_preview": observation})
-                        
+
                     scratchpad += f"{text}\nObservation: {observation}\n"
                     continue
-                    
-                # Neither action nor final answer found
+
                 observation = "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
                 scratchpad += f"{text}\nObservation: {observation}\n"
                 trace_store.append_step(trace, {"step": steps, "thought": thought or text, "action": None, "observation": observation})
 
-            except Exception as e:
-                logger.log_event("AGENT_STEP_ERROR", {"trace_id": trace["trace_id"], "step": steps, "error": str(e)})
-                # Provide a generic fallback answer if provider fails
+            except Exception as exc:
+                logger.log_event("AGENT_STEP_ERROR", {"trace_id": trace["trace_id"], "step": steps, "error": str(exc)})
                 answer = "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau."
-                return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "PROVIDER_ERROR")
+                return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "PROVIDER_ERROR", provider_name, total_usage)
 
-        # Exceeded max steps
         answer = "Tôi đã suy nghĩ quá giới hạn số bước nhưng chưa tìm được câu trả lời."
-        return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "MAX_STEPS_REACHED")
+        return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "MAX_STEPS_REACHED", provider_name, total_usage)
 
     def _finalize(
         self,
@@ -110,13 +112,22 @@ class ReActAgent:
         tool_calls: List[Dict[str, Any]],
         status: str,
         error_code: str | None,
+        provider_name: str,
+        usage: Dict[str, int],
     ) -> Dict[str, Any]:
         latency_ms = int((time.time() - started_at) * 1000)
         trace = trace_store.finalize_trace(
             trace,
             final_answer=answer,
             status=status,
-            metrics={"latency_ms": latency_ms, "tool_calls_count": len(tool_calls), "steps": steps},
+            metrics={
+                "latency_ms": latency_ms,
+                "tool_calls_count": len(tool_calls),
+                "steps": steps,
+                "provider": provider_name,
+                "model": self.llm.model_name,
+                **usage,
+            },
             error_code=error_code,
         )
         logger.log_event("AGENT_FINAL", {"trace_id": trace["trace_id"], "latency_ms": latency_ms, "steps": steps, "status": status})

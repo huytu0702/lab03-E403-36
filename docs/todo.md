@@ -107,17 +107,16 @@ Tài liệu này liệt kê các phần **chưa làm** hoặc mới ở mức sk
 
 ### Đã xong
 
-- có UI cơ bản ở [streamlit_app.py](F:/lab03-E403-36/streamlit_app.py)
-- chọn được `v1` hoặc `v2`
-- hiển thị answer, latency, steps, trace id và tool calls
+- nâng cấp [streamlit_app.py](F:/lab03-E403-36/streamlit_app.py) thành compare mode giữa `v1` và `v2`
+- thêm prompt mẫu cho 5 test cases trong sidebar
+- thêm chat history để demo liên tục trước lớp
+- thêm health check và metrics summary ngay trong UI
+- hiển thị answer, latency, steps, trace id và tool calls rõ ràng hơn
 
 ### Còn làm
 
-- thêm compare view giữa `v1` và `v2` trên cùng input
-- thêm chat history
-- thêm bảng benchmark 5 test cases
-- hiển thị trace theo dạng dễ đọc hơn
-- cải thiện UX để demo trước lớp
+- chụp screenshot đẹp cho report
+- polish thêm màu sắc hoặc layout nếu muốn
 
 ## Phase 7. Logging, Metrics, and Evaluation
 
@@ -125,48 +124,41 @@ Tài liệu này liệt kê các phần **chưa làm** hoặc mới ở mức sk
 
 - có logger JSON trong [src/telemetry/logger.py](F:/lab03-E403-36/src/telemetry/logger.py)
 - có trace store trong [src/telemetry/trace_store.py](F:/lab03-E403-36/src/telemetry/trace_store.py)
-- có log step cơ bản cho `v1` và `v2`
+- có metrics summary endpoint ở [src/api/routes/metrics.py](F:/lab03-E403-36/src/api/routes/metrics.py)
+- tổng hợp được `success_rate`, `avg_latency_ms`, `avg_steps`, `avg_tool_calls`, token usage theo version
+- có benchmark harness ở [scripts/run_benchmark.py](F:/lab03-E403-36/scripts/run_benchmark.py)
 
 ### Còn làm
 
-- thêm summary metrics endpoint
-- tính success rate, average latency, average steps theo version
-- ghi token usage và provider metrics thật
-- chuẩn hóa trace file cho report
-- tạo script tổng hợp kết quả benchmark từ logs/traces
+- đưa screenshot hoặc bảng benchmark cuối cùng vào report nhóm
 
 ## Phase 8. Test Cases and Validation
 
 ### Đã xong
 
 - đã định nghĩa 5 test cases trong [docs/test_cases.md](F:/lab03-E403-36/docs/test_cases.md)
-- đã verify thủ công `v1`, `v2`, và `/traces/{trace_id}`
+- thêm `pytest` smoke tests ở [tests/test_api.py](F:/lab03-E403-36/tests/test_api.py)
+- đã cover API health, products, tools, coupon lỗi và chat `v1`/`v2`
+- có test harness chạy cùng một bộ case cho `v1` và `v2`
+- benchmark lưu expected vs actual vào `logs/benchmarks/benchmark_latest.json`
 
 ### Còn làm
 
-- viết `pytest` cho API mới
-- viết test cho tools endpoints
-- viết test cho edge cases:
-  - coupon sai
-  - không đủ hàng
-  - city không có rule ship
-  - product không tồn tại
-- tạo test harness chạy cùng một bộ case cho `v1` và `v2`
-- lưu expected vs actual để đưa vào report
+- trước lúc nộp bài, chạy benchmark lại 1 lần trên máy demo chính thức để chụp kết quả mới nhất
 
 ## Phase 9. Providers and Production-like Validation
 
 ### Đã xong
 
 - có provider abstraction sẵn trong `src/core`
-- có `mock` provider để local dev không cần API key
+- nâng cấp `mock` provider để local dev benchmark được ngay cả khi chưa có API key
+- thêm usage tracking theo provider/model và graceful error handling cho local GGUF provider
+- app vẫn chạy được ở chế độ `fallback-seed` nếu Docker/Postgres chưa sẵn sàng
 
 ### Còn làm
 
-- test thật với OpenAI hoặc Gemini
-- đo latency và token usage thật
-- xử lý lỗi provider timeout hoặc API failure
-- cân nhắc cài `requirements-local.txt` nếu muốn test local GGUF model
+- nếu nhóm có API key thật, set `DEFAULT_PROVIDER=openai` hoặc `gemini` trong `.env` rồi chạy benchmark lại để lấy số liệu production-like cuối cùng
+- nếu muốn chạy local GGUF, cài thêm `pip install -r requirements-local.txt`
 
 ## Ưu tiên thực hiện tiếp theo
 
