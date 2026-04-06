@@ -166,7 +166,7 @@ Ngày chạy: `2026-04-06`
 
 ## Artifacts
 
-- Raw JSON kết quả run cuối: `logs/benchmarks/benchmark_20260406_102913.json`
+- Raw JSON kết quả run cuối: `logs/benchmarks/benchmark_20260406_103108.json`
 - SQLite runtime DB: `runtime_eval.sqlite`
 - Backend log:
 - `logs/backend_eval.out.log`

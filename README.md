@@ -29,6 +29,22 @@ If you prefer quick scripts:
 - Windows PowerShell: `./scripts/run_postgres.ps1`
 - macOS/Linux: `./scripts/run_postgres.sh`
 
+### 3b. Run Full Stack with Docker
+This starts PostgreSQL, FastAPI, and Streamlit together.
+
+```bash
+docker compose up -d --build
+```
+
+Services after startup:
+- FastAPI: `http://127.0.0.1:8000`
+- Streamlit: `http://127.0.0.1:8501`
+- PostgreSQL: `127.0.0.1:5432`
+
+Quick scripts:
+- Windows PowerShell: `./scripts/run_stack.ps1`
+- macOS/Linux: `./scripts/run_stack.sh`
+
 ### 4. Run Backend (FastAPI)
 ```bash
 uvicorn src.api.main:app --reload --host 127.0.0.1 --port 8000
