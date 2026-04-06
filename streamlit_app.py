@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-=======
 from __future__ import annotations
 
 from typing import Any, Dict, List
 
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 import requests
 import streamlit as st
 
@@ -13,11 +10,10 @@ from src.evaluation.benchmark_cases import BENCHMARK_CASES
 
 
 settings = get_settings()
-<<<<<<< HEAD
-BASE_API_URL = f"http://{settings.api_host}:{settings.api_port}/api/v1"
-CHAT_API_URL = f"{BASE_API_URL}/chat"
-HEALTH_API_URL = f"{BASE_API_URL}/health"
-METRICS_API_URL = f"{BASE_API_URL}/metrics/summary"
+BASE_URL = f"http://{settings.api_host}:{settings.api_port}/api/v1"
+CHAT_URL = f"{BASE_URL}/chat"
+HEALTH_URL = f"{BASE_URL}/health"
+METRICS_URL = f"{BASE_URL}/metrics/summary"
 
 DEFAULT_PROMPTS = {
     "FAQ đổi trả": "Chính sách đổi trả là gì?",
@@ -30,72 +26,21 @@ DEFAULT_PROMPTS = {
 
 st.set_page_config(page_title=settings.app_name, layout="wide")
 st.title("Smart E-commerce Assistant")
-st.caption("Compare mode cho chatbot `v1` và ReAct agent `v2`")
-
-if "history" not in st.session_state:
-    st.session_state.history = []
-if "message" not in st.session_state:
-    st.session_state.message = DEFAULT_PROMPTS["Quote nhiều bước"]
-
-
-def fetch_json(url: str):
-    try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        return response.json()
-    except requests.RequestException as exc:
-        return {"error": str(exc)}
-
-
-def send_chat(version: str, message: str, session_id: str):
-    try:
-        response = requests.post(
-            CHAT_API_URL,
-            json={"message": message, "version": version, "session_id": session_id},
-            timeout=30,
-        )
-        data = response.json()
-        if response.status_code >= 400:
-            data.setdefault("status", "error")
-        return data
-    except requests.RequestException as exc:
-        return {
-            "version": version,
-            "answer": "Không gọi được backend. Hãy kiểm tra FastAPI đã chạy chưa.",
-            "latency_ms": 0,
-            "steps": 0,
-            "tool_calls": [],
-            "trace_id": "",
-            "status": "error",
-            "error_code": str(exc),
-        }
-
-
-def render_result(title: str, data: dict):
-    st.subheader(title)
-    st.write(data.get("answer", "No answer"))
-=======
-BASE_URL = f"http://{settings.api_host}:{settings.api_port}/api/v1"
-CHAT_URL = f"{BASE_URL}/chat"
-METRICS_URL = f"{BASE_URL}/metrics/summary"
-
-st.set_page_config(page_title=settings.app_name, layout="wide")
-st.title("Smart E-commerce Assistant")
 st.caption("Compare `v1` chatbot và `v2` ReAct agent trên cùng input, kèm reasoning log từng bước.")
 
 
-def _post_chat(message: str, version: str) -> Dict[str, Any]:
-    response = requests.post(
-        CHAT_URL,
-        json={"message": message, "version": version, "session_id": "streamlit-demo"},
-        timeout=60,
-    )
+def _get_json(url: str, timeout: int = 30) -> Dict[str, Any]:
+    response = requests.get(url, timeout=timeout)
     response.raise_for_status()
     return response.json()
 
 
-def _get_metrics() -> Dict[str, Any]:
-    response = requests.get(METRICS_URL, timeout=30)
+def _post_chat(message: str, version: str, session_id: str) -> Dict[str, Any]:
+    response = requests.post(
+        CHAT_URL,
+        json={"message": message, "version": version, "session_id": session_id},
+        timeout=60,
+    )
     response.raise_for_status()
     return response.json()
 
@@ -112,7 +57,10 @@ def _render_reasoning_steps(steps: List[Dict[str, Any]]) -> None:
                 if key == "step":
                     continue
                 st.markdown(f"**{key}**")
-                st.json(value) if isinstance(value, (dict, list)) else st.write(value)
+                if isinstance(value, (dict, list)):
+                    st.json(value)
+                else:
+                    st.write(value)
 
 
 def _render_single_result(title: str, result: Dict[str, Any]) -> None:
@@ -130,7 +78,10 @@ def _render_single_result(title: str, result: Dict[str, Any]) -> None:
     col6.metric("Cost", f"{result.get('cost_estimate', 0.0):.4f}")
 
     st.caption(
-        f"Provider: `{result.get('provider') or '-'}` | Model: `{result.get('model') or '-'}` | Trace: `{result.get('trace_id') or '-'}`"
+        f"Provider: `{result.get('provider') or '-'}` | "
+        f"Model: `{result.get('model') or '-'}` | "
+        f"Trace: `{result.get('trace_id') or '-'}` | "
+        f"Error: `{result.get('error_code') or '-'}'"
     )
 
     st.markdown("**Tool Calls**")
@@ -148,11 +99,11 @@ def _render_compare_result(result: Dict[str, Any]) -> None:
         _render_single_result("v2", compare_results.get("v2", {}))
 
 
-def _run_benchmark() -> List[Dict[str, Any]]:
+def _run_benchmark(session_id_prefix: str) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for case in BENCHMARK_CASES:
-        result = _post_chat(case["message"], "compare")
-        compare_results = result.get("compare_results", {})
+        result = _post_chat(case["message"], "compare", f"{session_id_prefix}-{case['id']}")
+        compare_results = result.get("compare_results") or {}
         v1 = compare_results.get("v1", {})
         v2 = compare_results.get("v2", {})
         rows.append(
@@ -174,125 +125,75 @@ def _run_benchmark() -> List[Dict[str, Any]]:
 
 st.session_state.setdefault("chat_history", [])
 st.session_state.setdefault("benchmark_rows", [])
+st.session_state.setdefault("message", DEFAULT_PROMPTS["Quote nhiều bước"])
+st.session_state.setdefault("session_id", "streamlit-demo")
 
 with st.sidebar:
     st.header("Controls")
     query_mode = st.radio("Query mode", ["compare", "v1", "v2"], index=0)
+    selected_prompt = st.selectbox("Prompt mẫu", list(DEFAULT_PROMPTS.keys()))
+    if st.button("Nạp prompt", use_container_width=True):
+        st.session_state["message"] = DEFAULT_PROMPTS[selected_prompt]
+
+    session_id = st.text_input("Session ID", key="session_id")
+
     if st.button("Refresh metrics", use_container_width=True):
         try:
-            st.session_state["metrics_summary"] = _get_metrics()
+            st.session_state["metrics_summary"] = _get_json(METRICS_URL)
+            st.session_state.pop("metrics_error", None)
         except Exception as exc:
             st.session_state["metrics_error"] = str(exc)
+
     if st.button("Run 5-case benchmark", use_container_width=True):
         try:
-            st.session_state["benchmark_rows"] = _run_benchmark()
+            st.session_state["benchmark_rows"] = _run_benchmark(session_id)
             st.session_state.pop("benchmark_error", None)
         except Exception as exc:
             st.session_state["benchmark_error"] = str(exc)
 
     st.divider()
+    st.subheader("Health check")
+    try:
+        health = _get_json(HEALTH_URL, timeout=10)
+        st.success(f"API: {health.get('status', 'unknown')}")
+        db_info = health.get("database", {})
+        st.write(f"DB mode: `{db_info.get('mode', 'unknown')}`")
+        st.write(f"DB available: `{db_info.get('available', False)}`")
+    except Exception as exc:
+        st.error(f"Không đọc được health check: {exc}")
+
+    st.divider()
     st.subheader("Metrics Summary")
     try:
-        metrics_summary = st.session_state.get("metrics_summary") or _get_metrics()
+        metrics_summary = st.session_state.get("metrics_summary") or _get_json(METRICS_URL)
         st.json(metrics_summary)
     except Exception as exc:
         st.warning(f"Không đọc được metrics: {exc}")
 
-message = st.text_area(
-    "Message",
-    value="Tôi muốn mua 2 iPhone 15 dùng mã WINNER10 ship Hà Nội",
-    height=120,
-)
-
-if st.button("Send", type="primary"):
-    try:
-        data = _post_chat(message, query_mode)
-        st.session_state["chat_history"].insert(0, {"message": message, "mode": query_mode, "response": data})
-    except Exception as exc:
-        st.error(f"Request failed: {exc}")
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
-
-if st.session_state["chat_history"]:
-    current = st.session_state["chat_history"][0]
-    st.markdown("## Current Result")
-    st.caption(f"Mode: `{current['mode']}`")
-    if current["mode"] == "compare":
-        _render_compare_result(current["response"])
-    else:
-        _render_single_result(current["mode"], current["response"])
-
-<<<<<<< HEAD
-    st.caption(f"Error code: {data.get('error_code') or 'None'}")
-    st.json(data.get("tool_calls", []))
-
-
-with st.sidebar:
-    st.header("Demo controls")
-    selected_prompt = st.selectbox("Prompt mẫu", list(DEFAULT_PROMPTS.keys()))
-    if st.button("Nạp prompt", use_container_width=True):
-        st.session_state.message = DEFAULT_PROMPTS[selected_prompt]
-
-    st.divider()
-    st.subheader("Health check")
-    health = fetch_json(HEALTH_API_URL)
-    if "error" in health:
-        st.error(health["error"])
-    else:
-        st.success(f"API: {health.get('status', 'unknown')}")
-        db_info = health.get("database", {})
-        st.write(f"DB mode: `{db_info.get('mode', 'unknown')}`")
-
-    st.divider()
-    st.subheader("Metrics summary")
-    metrics = fetch_json(METRICS_API_URL)
-    if "error" in metrics:
-        st.warning("Chưa lấy được metrics summary.")
-    else:
-        st.metric("Total traces", metrics.get("total_traces", 0))
-        for version_name, summary in metrics.get("by_version", {}).items():
-            st.write(
-                f"**{version_name}** — success `{summary.get('success_rate', 0):.0%}`, "
-                f"avg latency `{summary.get('avg_latency_ms', 0)} ms`, avg steps `{summary.get('avg_steps', 0)}`"
-            )
-
-mode = st.radio("Chế độ demo", ["Single version", "Compare v1 vs v2"], horizontal=True)
-version = st.selectbox("Version", ["v1", "v2"], index=0 if settings.version == "v1" else 1, disabled=mode == "Compare v1 vs v2")
-session_id = st.text_input("Session ID", value="streamlit-demo")
 message = st.text_area("Message", key="message", height=120)
 
 if st.button("Send", type="primary"):
     if not message.strip():
         st.warning("Bạn hãy nhập câu hỏi trước.")
-    elif mode == "Compare v1 vs v2":
-        result_v1 = send_chat("v1", message, session_id)
-        result_v2 = send_chat("v2", message, session_id)
-
-        col_left, col_right = st.columns(2)
-        with col_left:
-            render_result("Kết quả `v1`", result_v1)
-        with col_right:
-            render_result("Kết quả `v2`", result_v2)
-
-        st.session_state.history.insert(0, {"question": message, "mode": "compare", "results": {"v1": result_v1, "v2": result_v2}})
     else:
-        result = send_chat(version, message, session_id)
-        render_result(f"Kết quả `{version}`", result)
-        st.session_state.history.insert(0, {"question": message, "mode": version, "results": {version: result}})
+        try:
+            data = _post_chat(message, query_mode, st.session_state["session_id"])
+            st.session_state["chat_history"].insert(
+                0,
+                {"message": message, "mode": query_mode, "session_id": st.session_state["session_id"], "response": data},
+            )
+        except Exception as exc:
+            st.error(f"Request failed: {exc}")
 
-if st.session_state.history:
-    st.divider()
-    st.subheader("Recent chat history")
-    for index, item in enumerate(st.session_state.history[:5], start=1):
-        with st.expander(f"#{index} — {item['question'][:80]}"):
-            st.write(f"Mode: `{item['mode']}`")
-            for version_name, result in item["results"].items():
-                st.markdown(f"**{version_name}**")
-                st.write(result.get("answer", ""))
-                st.caption(
-                    f"status={result.get('status')} | latency={result.get('latency_ms', 0)} ms | "
-                    f"steps={result.get('steps', 0)} | trace_id={result.get('trace_id', '-') }"
-                )
-=======
+if st.session_state["chat_history"]:
+    current = st.session_state["chat_history"][0]
+    st.markdown("## Current Result")
+    st.caption(f"Mode: `{current['mode']}` | Session ID: `{current['session_id']}`")
+    if current["mode"] == "compare":
+        _render_compare_result(current["response"])
+    else:
+        _render_single_result(current["mode"], current["response"])
+
 if st.session_state["benchmark_rows"]:
     st.markdown("## Benchmark 5 Cases")
     st.dataframe(st.session_state["benchmark_rows"], use_container_width=True)
@@ -303,8 +204,8 @@ if st.session_state["chat_history"]:
     st.markdown("## Chat History")
     for item in st.session_state["chat_history"][1:]:
         with st.expander(f"{item['mode']} • {item['message'][:80]}", expanded=False):
+            st.caption(f"Session ID: `{item['session_id']}`")
             if item["mode"] == "compare":
                 _render_compare_result(item["response"])
             else:
                 _render_single_result(item["mode"], item["response"])
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
