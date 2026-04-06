@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Final
 
 import src.db.session as db_session
@@ -16,9 +17,7 @@ DOMAIN_KEYWORDS: Final[tuple[str, ...]] = (
     "dien thoai",
     "laptop",
     "tai nghe",
-    "gia",
     "bao nhieu",
-    "tong",
     "ton kho",
     "con hang",
     "coupon",
@@ -45,12 +44,15 @@ ASSISTANT_KEYWORDS: Final[tuple[str, ...]] = (
 
 
 class DomainGuard:
+    def _contains_keyword(self, normalized: str, keyword: str) -> bool:
+        return re.search(rf"(?<!\w){re.escape(keyword)}(?!\w)", normalized) is not None
+
     def is_in_domain(self, message: str) -> bool:
         normalized = normalize_text(message)
         if not normalized:
             return False
 
-        if any(keyword in normalized for keyword in ASSISTANT_KEYWORDS):
+        if any(self._contains_keyword(normalized, keyword) for keyword in ASSISTANT_KEYWORDS):
             return True
 
         db = db_session.SessionLocal()
@@ -62,7 +64,7 @@ class DomainGuard:
         finally:
             db.close()
 
-        return any(keyword in normalized for keyword in DOMAIN_KEYWORDS)
+        return any(self._contains_keyword(normalized, keyword) for keyword in DOMAIN_KEYWORDS)
 
     def rejection_message(self) -> str:
         return (

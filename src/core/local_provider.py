@@ -10,6 +10,7 @@ class LocalProvider(LLMProvider):
     LLM Provider for local models using llama-cpp-python.
     Optimized for CPU usage with GGUF models.
     """
+
     def __init__(self, model_path: str, n_ctx: int = 4096, n_threads: Optional[int] = None):
         """
         Initialize the local Llama model.
@@ -18,13 +19,8 @@ class LocalProvider(LLMProvider):
             n_ctx: Context window size.
             n_threads: Number of CPU threads to use. Defaults to all available.
         """
-<<<<<<< HEAD
-        super().__init__(model_name=os.path.basename(model_path))
-
-=======
         super().__init__(model_name=os.path.basename(model_path), provider_name="local")
-        
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
+
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at {model_path}. Please download it first.")
 
@@ -44,9 +40,7 @@ class LocalProvider(LLMProvider):
 
     def generate(self, prompt: str, system_prompt: Optional[str] = None) -> Dict[str, Any]:
         start_time = time.time()
-        
-        # Phi-3 / Llama-3 style formatting if not handled by a template
-        full_prompt = prompt
+
         if system_prompt:
             full_prompt = f"<|system|>\n{system_prompt}<|end|>\n<|user|>\n{prompt}<|end|>\n<|assistant|>"
         else:
@@ -56,7 +50,7 @@ class LocalProvider(LLMProvider):
             full_prompt,
             max_tokens=1024,
             stop=["<|end|>", "Observation:"],
-            echo=False
+            echo=False,
         )
 
         end_time = time.time()
@@ -66,7 +60,7 @@ class LocalProvider(LLMProvider):
         usage = {
             "prompt_tokens": response["usage"]["prompt_tokens"],
             "completion_tokens": response["usage"]["completion_tokens"],
-            "total_tokens": response["usage"]["total_tokens"]
+            "total_tokens": response["usage"]["total_tokens"],
         }
 
         return {
@@ -78,7 +72,6 @@ class LocalProvider(LLMProvider):
         }
 
     def stream(self, prompt: str, system_prompt: Optional[str] = None) -> Generator[str, None, None]:
-        full_prompt = prompt
         if system_prompt:
             full_prompt = f"<|system|>\n{system_prompt}<|end|>\n<|user|>\n{prompt}<|end|>\n<|assistant|>"
         else:
@@ -88,7 +81,7 @@ class LocalProvider(LLMProvider):
             full_prompt,
             max_tokens=1024,
             stop=["<|end|>", "Observation:"],
-            stream=True
+            stream=True,
         )
 
         for chunk in stream:

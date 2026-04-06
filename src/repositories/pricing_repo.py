@@ -32,7 +32,6 @@ class PricingRepository:
             except SQLAlchemyError:
                 pass
 
-<<<<<<< HEAD
         target = coupon_code.strip().lower()
         for coupon in seed_data.COUPONS:
             if coupon["code"].lower() == target:
@@ -75,19 +74,6 @@ class PricingRepository:
                 "is_active": bool(data.get("is_active", True)),
                 "expires_at": data.get("expires_at"),
             }
-=======
-    def get_shipping_rule(self, db: Session, destination_city: str) -> models.ShippingRule | None:
-        target = normalize_text(destination_city)
-        rules = (
-            db.execute(select(models.ShippingRule).where(models.ShippingRule.is_active.is_(True)))
-            .scalars()
-            .all()
-        )
-        for rule in rules:
-            if normalize_text(rule.city) == target:
-                return rule
-        return None
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
         return {
             "code": coupon.code,
@@ -101,4 +87,3 @@ class PricingRepository:
 
 
 pricing_repo = PricingRepository()
-

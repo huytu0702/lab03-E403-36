@@ -9,11 +9,7 @@ from src.core.config import get_settings
 from src.core.llm_provider import LLMProvider
 from src.core.provider_factory import build_provider
 from src.telemetry.logger import logger
-<<<<<<< HEAD
-from src.telemetry.metrics import tracker
-=======
 from src.telemetry.metrics import build_llm_metrics, tracker
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 from src.telemetry.trace_store import trace_store
 
 
@@ -37,16 +33,11 @@ class ReActAgent:
         steps = 0
         scratchpad = f"User: {user_input}\n"
         system_prompt = self.get_system_prompt()
-<<<<<<< HEAD
-        provider_name = "unknown"
-        total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
-=======
         total_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         llm_calls = 0
         llm_latency_ms = 0
         observed_tools: Dict[str, Dict[str, Any]] = {}
         required_tools = self._infer_required_tools(user_input)
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
         while steps < self.max_steps:
             steps += 1
@@ -55,19 +46,11 @@ class ReActAgent:
             try:
                 response = self.llm.generate(prompt=scratchpad, system_prompt=system_prompt)
                 text = response["content"]
-<<<<<<< HEAD
-                provider_name = response.get("provider", provider_name)
-                usage = response.get("usage") or {}
-                for key in total_usage:
-                    total_usage[key] += int(usage.get(key, 0) or 0)
-                tracker.track_request(provider=provider_name, model=self.llm.model_name, usage=usage, latency_ms=response.get("latency_ms", 0))
-=======
                 usage = response.get("usage", {})
                 llm_calls += 1
                 llm_latency_ms += int(response.get("latency_ms", 0))
-                total_usage["prompt_tokens"] += int(usage.get("prompt_tokens", 0))
-                total_usage["completion_tokens"] += int(usage.get("completion_tokens", 0))
-                total_usage["total_tokens"] += int(usage.get("total_tokens", 0))
+                for key in total_usage:
+                    total_usage[key] += int(usage.get(key, 0) or 0)
                 tracker.track_request(
                     response.get("provider", self.llm.provider_name),
                     response.get("model", self.llm.model_name),
@@ -83,16 +66,10 @@ class ReActAgent:
                     "latency_ms": int(response.get("latency_ms", 0)),
                     "raw_model_output": text,
                 }
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
                 try:
                     parsed = parse_react_response(text)
                 except Exception as exc:
-<<<<<<< HEAD
-                    observation = f"System Error parsing your response: {str(exc)}. Please strictly use valid JSON in 'Action Input'."
-                    scratchpad += f"{text}\nObservation: {observation}\n"
-                    trace_store.append_step(trace, {"step": steps, "thought": text, "action": None, "observation": observation})
-=======
                     observation = (
                         f"System Error parsing your response: {str(exc)}. "
                         "Please strictly use valid JSON in 'Action Input'."
@@ -107,20 +84,12 @@ class ReActAgent:
                         }
                     )
                     trace_store.append_step(trace, step_payload)
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
                     continue
 
                 thought = parsed.get("thought")
                 action = parsed.get("action")
                 final_answer = parsed.get("final_answer")
-<<<<<<< HEAD
-
-                if final_answer:
-                    trace_store.append_step(trace, {"step": steps, "thought": thought, "action": None, "observation": final_answer})
-                    return self._finalize(trace, final_answer, started_at, steps, tool_calls, "success", None, provider_name, total_usage)
-=======
                 step_payload["thought"] = thought
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
                 if action:
                     tool_name, args = action
@@ -143,36 +112,22 @@ class ReActAgent:
                         result = f"Error executing tool {tool_name}: {str(exc)}"
                         observation = result
                         has_error = True
-<<<<<<< HEAD
-
-                    trace_store.append_step(
-                        trace,
-=======
                         observed_tools[tool_name] = {"ok": False, "args": args, "error": str(exc)}
 
                     step_payload.update(
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
                         {
                             "action": {"tool": tool_name, "args": args},
                             "observation": result,
                             "status": "tool_error" if has_error else "tool_success",
                         }
                     )
-<<<<<<< HEAD
-=======
                     if parsed.get("has_mixed_output"):
                         step_payload["parser_note"] = "Ignored Final Answer because the model still emitted an Action."
                     trace_store.append_step(trace, step_payload)
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
                     if not has_error:
                         tool_calls.append({"tool": tool_name, "args": args, "result_preview": observation})
 
-<<<<<<< HEAD
-                    scratchpad += f"{text}\nObservation: {observation}\n"
-                    continue
-
-=======
                     if self._has_required_grounding(required_tools, observed_tools):
                         grounded_answer = self._build_grounded_answer(user_input, observed_tools)
                         trace_store.append_step(
@@ -234,8 +189,6 @@ class ReActAgent:
                         llm_calls=llm_calls,
                         llm_latency_ms=llm_latency_ms,
                     )
-
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
                 observation = "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
                 scratchpad += f"{text}\nObservation: {observation}\n"
                 step_payload.update({"action": None, "observation": observation, "status": "invalid_step"})
@@ -244,12 +197,6 @@ class ReActAgent:
             except Exception as exc:
                 logger.log_event("AGENT_STEP_ERROR", {"trace_id": trace["trace_id"], "step": steps, "error": str(exc)})
                 answer = "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau."
-<<<<<<< HEAD
-                return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "PROVIDER_ERROR", provider_name, total_usage)
-
-        answer = "Tôi đã suy nghĩ quá giới hạn số bước nhưng chưa tìm được câu trả lời."
-        return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "MAX_STEPS_REACHED", provider_name, total_usage)
-=======
                 trace_store.append_step(
                     trace,
                     {
@@ -296,7 +243,6 @@ class ReActAgent:
             llm_calls=llm_calls,
             llm_latency_ms=llm_latency_ms,
         )
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
     def _finalize(
         self,
@@ -308,14 +254,9 @@ class ReActAgent:
         tool_calls: List[Dict[str, Any]],
         status: str,
         error_code: str | None,
-<<<<<<< HEAD
-        provider_name: str,
-        usage: Dict[str, int],
-=======
         total_usage: Dict[str, int],
         llm_calls: int,
         llm_latency_ms: int,
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
     ) -> Dict[str, Any]:
         latency_ms = int((time.time() - started_at) * 1000)
         llm_metrics = build_llm_metrics(
@@ -333,13 +274,7 @@ class ReActAgent:
                 "latency_ms": latency_ms,
                 "tool_calls_count": len(tool_calls),
                 "steps": steps,
-<<<<<<< HEAD
-                "provider": provider_name,
-                "model": self.llm.model_name,
-                **usage,
-=======
                 **llm_metrics,
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
             },
             error_code=error_code,
         )

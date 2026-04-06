@@ -6,11 +6,7 @@ from src.db.session import SessionLocal
 from src.services.faq_service import faq_service
 from src.services.product_service import product_service
 from src.telemetry.logger import logger
-<<<<<<< HEAD
-from src.telemetry.metrics import tracker
-=======
 from src.telemetry.metrics import build_llm_metrics, tracker
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 from src.telemetry.trace_store import trace_store
 
 
@@ -23,18 +19,12 @@ class BaselineChatbot:
         trace = trace_store.create_trace(version="v1", user_query=user_input, session_id=session_id)
         logger.log_event("CHATBOT_REQUEST_RECEIVED", {"trace_id": trace["trace_id"], "input": user_input})
 
-<<<<<<< HEAD
-        provider_name = "rule-based"
-        model_name = "grounded-retrieval"
-        usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
-=======
         llm_usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         llm_calls = 0
         llm_latency_ms = 0
         answer = ""
         status = "success"
         error_code = None
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
 
         db = SessionLocal()
         try:
@@ -82,18 +72,6 @@ class BaselineChatbot:
                             "model": self.llm.model_name,
                         },
                     )
-<<<<<<< HEAD
-                    tracker.track_request(
-                        provider=generated.get("provider", "unknown"),
-                        model=self.llm.model_name,
-                        usage=generated.get("usage"),
-                        latency_ms=generated.get("latency_ms", 0),
-                    )
-                    provider_name = generated.get("provider", "unknown")
-                    model_name = self.llm.model_name
-                    usage = generated.get("usage") or usage
-                    answer = generated["content"]
-=======
                     try:
                         generated = self.llm.generate(
                             user_input,
@@ -142,7 +120,6 @@ class BaselineChatbot:
                                 "error": str(exc),
                             },
                         )
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
         finally:
             db.close()
 
@@ -157,17 +134,6 @@ class BaselineChatbot:
         trace = trace_store.finalize_trace(
             trace,
             final_answer=answer,
-<<<<<<< HEAD
-            status="success",
-            metrics={
-                "latency_ms": latency_ms,
-                "tool_calls_count": 0,
-                "steps": 1,
-                "provider": provider_name,
-                "model": model_name,
-                **usage,
-            },
-=======
             status=status,
             metrics={
                 "latency_ms": latency_ms,
@@ -180,7 +146,6 @@ class BaselineChatbot:
         logger.log_event(
             "CHATBOT_FINAL",
             {"trace_id": trace["trace_id"], "latency_ms": latency_ms, "status": status, "steps": len(trace["steps"])},
->>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
         )
         return {
             "version": "v1",
