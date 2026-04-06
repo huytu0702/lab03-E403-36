@@ -1,67 +1,176 @@
-# Remaining Work
+# Remaining Work by Phase
 
 ## Mục tiêu
 
-Tài liệu này tóm tắt ngắn gọn các phần **chưa làm** hoặc mới ở mức skeleton trong MVP hiện tại.
+Tài liệu này liệt kê các phần **chưa làm** hoặc mới ở mức skeleton, được nhóm lại theo từng phase triển khai để dễ giao việc và theo dõi tiến độ.
 
-## Chưa hoàn thành
+## Phase 1. Environment and Bootstrapping
 
-### 1. Database thật chưa nối vào app
+### Đã xong
 
-- `v1` và `v2` vẫn đang đọc dữ liệu từ seed in-memory
-- chưa query Postgres qua repository hoặc service layer
-- chưa verify end-to-end giữa FastAPI và PostgreSQL
+- tạo `.venv`
+- cài dependencies nền
+- tạo `.env` từ `.env.example`
+- dựng skeleton FastAPI và Streamlit
 
-### 2. CRUD và repository chưa hoàn chỉnh
+### Còn làm
 
-- chưa có repository thật cho:
+- chuẩn hóa hướng dẫn setup cho toàn team trong `README`
+- xác nhận mọi máy trong nhóm chạy cùng version Python
+- thêm script chạy nhanh cho backend và frontend nếu cần
+
+## Phase 2. PostgreSQL and Data Layer
+
+### Đã xong
+
+- tạo [docker-compose.yml](F:/lab03-E403-36/docker-compose.yml)
+- tạo [db/init.sql](F:/lab03-E403-36/db/init.sql)
+- tạo skeleton DB package:
+  - [src/db/session.py](F:/lab03-E403-36/src/db/session.py)
+  - [src/db/models.py](F:/lab03-E403-36/src/db/models.py)
+
+### Còn làm
+
+- chạy và verify Postgres bằng Docker thật
+- hoàn thiện schema đầy đủ cho:
   - `products`
   - `inventory`
   - `coupons`
   - `shipping_rules`
   - `faqs`
-- model DB mới ở mức skeleton
+  - `quote_logs` nếu dùng
+- seed dữ liệu thật vào Postgres
+- viết repository hoặc query layer thay cho seed in-memory
+- nối service layer sang DB thật
 
-### 3. ReAct agent chưa là bản LLM-driven hoàn chỉnh
+## Phase 3. Backend API and Business Logic
 
-- `v2` hiện chạy theo deterministic plan
-- chưa parse `Thought`, `Action`, `Final Answer` từ output model
-- chưa có retry hoặc guardrail khi parse lỗi
+### Đã xong
 
-### 4. Chatbot `v1` mới là baseline tối thiểu
+- tạo entrypoint FastAPI: [src/api/main.py](F:/lab03-E403-36/src/api/main.py)
+- tạo route cơ bản:
+  - [src/api/routes/chat.py](F:/lab03-E403-36/src/api/routes/chat.py)
+  - [src/api/routes/products.py](F:/lab03-E403-36/src/api/routes/products.py)
+  - [src/api/routes/tools.py](F:/lab03-E403-36/src/api/routes/tools.py)
+  - [src/api/routes/traces.py](F:/lab03-E403-36/src/api/routes/traces.py)
 
-- chưa có prompt/context pipeline hoàn chỉnh
-- chưa tối ưu cho FAQ, product context và fallback behavior
+### Còn làm
 
-### 5. Frontend Streamlit còn rất cơ bản
+- chuyển tất cả API từ seed in-memory sang DB thật
+- hoàn thiện response/error contract nhất quán cho mọi endpoint
+- thêm endpoint metrics summary
+- thêm validate input chặt hơn cho tools
+- thêm error mapping rõ cho:
+  - `PRODUCT_NOT_FOUND`
+  - `INSUFFICIENT_STOCK`
+  - `COUPON_NOT_FOUND`
+  - `COUPON_INVALID`
+  - `SHIPPING_RULE_NOT_FOUND`
 
-- chưa có compare view `v1` vs `v2`
-- chưa có lịch sử chat
-- chưa có bảng benchmark 5 test cases
-- chưa render trace theo dạng dễ demo
+## Phase 4. Chatbot `v1`
 
-### 6. Test và evaluation chưa làm
+### Đã xong
 
-- chưa có test suite `pytest` cho API mới
-- chưa có test cho edge cases
-- chưa có script benchmark 5 test cases
-- chưa có bảng expected vs actual tự động
+- tạo baseline chatbot ở [src/chatbot/chatbot.py](F:/lab03-E403-36/src/chatbot/chatbot.py)
+- có trace cơ bản cho chatbot
+- trả response theo schema chung
 
-### 7. Metrics và observability chưa đủ
+### Còn làm
 
-- chưa có endpoint summary metrics
-- chưa có dashboard tổng hợp latency, steps, success rate
-- mới có trace file và log event cơ bản
+- thiết kế prompt `v1` rõ ràng hơn
+- bổ sung context retrieval cho FAQ và product info
+- tối ưu fallback khi câu hỏi mơ hồ
+- đảm bảo `v1` vẫn đơn giản, không vô tình thành agent
+- đo metrics thật khi dùng provider ngoài `mock`
 
-### 8. Provider thật chưa được kiểm thử
+## Phase 5. ReAct Agent `v2`
 
-- hệ thống đang mặc định dùng `mock`
-- chưa test thực tế với OpenAI hoặc Gemini
-- chưa đo latency và token usage thật
+### Đã xong
 
-## Ưu tiên tiếp theo
+- có skeleton agent chạy được ở [src/agent/agent.py](F:/lab03-E403-36/src/agent/agent.py)
+- có tools registry:
+  - [src/agent/tools_registry.py](F:/lab03-E403-36/src/agent/tools_registry.py)
+- có parser cơ bản:
+  - [src/agent/parser.py](F:/lab03-E403-36/src/agent/parser.py)
+- có trace từng bước
 
-1. Nối backend với PostgreSQL thật
+### Còn làm
+
+- thay deterministic plan bằng ReAct loop thật dùng LLM
+- parse `Thought`, `Action`, `Observation`, `Final Answer` từ model output
+- thêm robust parser cho JSON hoặc action format
+- thêm retry/fallback khi parse lỗi
+- thêm stopping condition tốt hơn ngoài `max_steps`
+- đảm bảo agent chỉ dùng dữ liệu có grounding từ tools
+
+## Phase 6. Frontend Streamlit
+
+### Đã xong
+
+- có UI cơ bản ở [streamlit_app.py](F:/lab03-E403-36/streamlit_app.py)
+- chọn được `v1` hoặc `v2`
+- hiển thị answer, latency, steps, trace id và tool calls
+
+### Còn làm
+
+- thêm compare view giữa `v1` và `v2` trên cùng input
+- thêm chat history
+- thêm bảng benchmark 5 test cases
+- hiển thị trace theo dạng dễ đọc hơn
+- cải thiện UX để demo trước lớp
+
+## Phase 7. Logging, Metrics, and Evaluation
+
+### Đã xong
+
+- có logger JSON trong [src/telemetry/logger.py](F:/lab03-E403-36/src/telemetry/logger.py)
+- có trace store trong [src/telemetry/trace_store.py](F:/lab03-E403-36/src/telemetry/trace_store.py)
+- có log step cơ bản cho `v1` và `v2`
+
+### Còn làm
+
+- thêm summary metrics endpoint
+- tính success rate, average latency, average steps theo version
+- ghi token usage và provider metrics thật
+- chuẩn hóa trace file cho report
+- tạo script tổng hợp kết quả benchmark từ logs/traces
+
+## Phase 8. Test Cases and Validation
+
+### Đã xong
+
+- đã định nghĩa 5 test cases trong [docs/test_cases.md](F:/lab03-E403-36/docs/test_cases.md)
+- đã verify thủ công `v1`, `v2`, và `/traces/{trace_id}`
+
+### Còn làm
+
+- viết `pytest` cho API mới
+- viết test cho tools endpoints
+- viết test cho edge cases:
+  - coupon sai
+  - không đủ hàng
+  - city không có rule ship
+  - product không tồn tại
+- tạo test harness chạy cùng một bộ case cho `v1` và `v2`
+- lưu expected vs actual để đưa vào report
+
+## Phase 9. Providers and Production-like Validation
+
+### Đã xong
+
+- có provider abstraction sẵn trong `src/core`
+- có `mock` provider để local dev không cần API key
+
+### Còn làm
+
+- test thật với OpenAI hoặc Gemini
+- đo latency và token usage thật
+- xử lý lỗi provider timeout hoặc API failure
+- cân nhắc cài `requirements-local.txt` nếu muốn test local GGUF model
+
+## Ưu tiên thực hiện tiếp theo
+
+1. Nối backend và services sang PostgreSQL thật
 2. Viết test cho `v1`, `v2`, tools và edge cases
 3. Nâng `v2` thành ReAct loop thật dùng LLM
-4. Hoàn thiện UI compare và benchmark
+4. Hoàn thiện compare UI và metrics summary
