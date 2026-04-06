@@ -18,8 +18,13 @@ class LocalProvider(LLMProvider):
             n_ctx: Context window size.
             n_threads: Number of CPU threads to use. Defaults to all available.
         """
+<<<<<<< HEAD
         super().__init__(model_name=os.path.basename(model_path))
 
+=======
+        super().__init__(model_name=os.path.basename(model_path), provider_name="local")
+        
+>>>>>>> 0c73add2950a3b23caf39caf4f34c4c2ea735a72
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at {model_path}. Please download it first.")
 
@@ -68,7 +73,8 @@ class LocalProvider(LLMProvider):
             "content": content,
             "usage": usage,
             "latency_ms": latency_ms,
-            "provider": "local"
+            "provider": "local",
+            "model": self.model_name,
         }
 
     def stream(self, prompt: str, system_prompt: Optional[str] = None) -> Generator[str, None, None]:

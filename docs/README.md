@@ -21,6 +21,7 @@ Mục tiêu chính:
 ## Danh sách tài liệu
 
 - `architecture.md`: kiến trúc tổng thể, module, cấu trúc thư mục đề xuất
+- `agent_versions.md`: mô tả cách hoạt động của `v1`, `v2` và danh sách tool hiện có
 - `database_schema.md`: schema PostgreSQL, bảng, quan hệ, dữ liệu seed
 - `api.md`: API contract cho FastAPI
 - `use_case.md`: use case, phạm vi MVP, phân biệt `v1` và `v2`

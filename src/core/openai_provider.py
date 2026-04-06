@@ -5,7 +5,7 @@ from src.core.llm_provider import LLMProvider
 
 class OpenAIProvider(LLMProvider):
     def __init__(self, model_name: str = "gpt-4o", api_key: Optional[str] = None):
-        super().__init__(model_name, api_key)
+        super().__init__(model_name, api_key, provider_name="openai")
         self.client = OpenAI(api_key=self.api_key)
 
     def generate(self, prompt: str, system_prompt: Optional[str] = None) -> Dict[str, Any]:
@@ -36,7 +36,8 @@ class OpenAIProvider(LLMProvider):
             "content": content,
             "usage": usage,
             "latency_ms": latency_ms,
-            "provider": "openai"
+            "provider": "openai",
+            "model": self.model_name,
         }
 
     def stream(self, prompt: str, system_prompt: Optional[str] = None) -> Generator[str, None, None]:

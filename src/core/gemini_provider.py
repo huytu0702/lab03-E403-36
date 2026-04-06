@@ -1,4 +1,3 @@
-import os
 import time
 import google.generativeai as genai
 from typing import Dict, Any, Optional, Generator
@@ -6,7 +5,7 @@ from src.core.llm_provider import LLMProvider
 
 class GeminiProvider(LLMProvider):
     def __init__(self, model_name: str = "gemini-1.5-flash", api_key: Optional[str] = None):
-        super().__init__(model_name, api_key)
+        super().__init__(model_name, api_key, provider_name="google")
         genai.configure(api_key=self.api_key)
         self.model = genai.GenerativeModel(model_name)
 
@@ -36,7 +35,8 @@ class GeminiProvider(LLMProvider):
             "content": content,
             "usage": usage,
             "latency_ms": latency_ms,
-            "provider": "google"
+            "provider": "google",
+            "model": self.model_name,
         }
 
     def stream(self, prompt: str, system_prompt: Optional[str] = None) -> Generator[str, None, None]:

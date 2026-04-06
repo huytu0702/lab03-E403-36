@@ -15,15 +15,31 @@ class ToolCallSummary(BaseModel):
     result_preview: str
 
 
-class ChatResponse(BaseModel):
+class TokenUsage(BaseModel):
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    total_tokens: int = 0
+
+
+class ChatRunResult(BaseModel):
     version: str
     answer: str
     latency_ms: int
     steps: int
     tool_calls: List[ToolCallSummary]
+    reasoning_steps: List[Dict[str, Any]] = Field(default_factory=list)
     trace_id: str
     status: str
     error_code: Optional[str] = None
+    provider: Optional[str] = None
+    model: Optional[str] = None
+    llm_calls: int = 0
+    token_usage: TokenUsage = Field(default_factory=TokenUsage)
+    cost_estimate: float = 0.0
+
+
+class ChatResponse(ChatRunResult):
+    compare_results: Optional[Dict[str, ChatRunResult]] = None
 
 
 class ErrorResponse(BaseModel):
