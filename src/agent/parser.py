@@ -2,6 +2,7 @@ import re
 from typing import Any, Dict
 
 from src.core.text import normalize_text
+from src.db.session import SessionLocal
 from src.services.product_service import product_service
 
 
@@ -24,4 +25,8 @@ def extract_city(message: str) -> str | None:
 
 
 def extract_product(message: str) -> Dict[str, Any] | None:
-    return product_service.detect_product_in_text(message)
+    db = SessionLocal()
+    try:
+        return product_service.detect_product_in_text(db, message)
+    finally:
+        db.close()

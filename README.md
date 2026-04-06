@@ -10,10 +10,42 @@ Copy the `.env.example` to `.env` and fill in your API keys:
 cp .env.example .env
 ```
 
+Recommended Python version (keep everyone consistent):
+- `3.11` (see `.python-version`)
+
 ### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
+
+### 3. Start PostgreSQL (Docker)
+This project uses PostgreSQL for products, inventory, coupons, shipping rules, and FAQs.
+
+```bash
+docker compose up -d postgres
+```
+
+If you prefer quick scripts:
+- Windows PowerShell: `./scripts/run_postgres.ps1`
+- macOS/Linux: `./scripts/run_postgres.sh`
+
+### 4. Run Backend (FastAPI)
+```bash
+uvicorn src.api.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Quick scripts:
+- Windows PowerShell: `./scripts/run_backend.ps1`
+- macOS/Linux: `./scripts/run_backend.sh`
+
+### 5. Run Frontend (Streamlit)
+```bash
+streamlit run streamlit_app.py --server.port 8501
+```
+
+Quick scripts:
+- Windows PowerShell: `./scripts/run_frontend.ps1`
+- macOS/Linux: `./scripts/run_frontend.sh`
 
 ### 3. Directory Structure
 - `src/tools/`: Extension point for your custom tools.

@@ -1,29 +1,19 @@
 from typing import Any, Dict, List
 
-from src.core.text import normalize_text
-from src.services.seed_data import PRODUCTS
+from sqlalchemy.orm import Session
+
+from src.repositories.catalog_repo import catalog_repo
 
 
 class ProductService:
-    def list_products(self, query: str | None = None) -> List[Dict[str, Any]]:
-        if not query:
-            return PRODUCTS
-        query_lower = query.lower()
-        return [product for product in PRODUCTS if query_lower in product["name"].lower()]
+    def list_products(self, db: Session, query: str | None = None) -> List[Dict[str, Any]]:
+        return catalog_repo.list_products(db, query=query)
 
-    def get_product(self, product_name: str) -> Dict[str, Any] | None:
-        target = normalize_text(product_name)
-        for product in PRODUCTS:
-            if normalize_text(product["name"]) == target:
-                return product
-        return None
+    def get_product(self, db: Session, product_name: str) -> Dict[str, Any] | None:
+        return catalog_repo.get_product_by_name(db, product_name)
 
-    def detect_product_in_text(self, text: str) -> Dict[str, Any] | None:
-        text_normalized = normalize_text(text)
-        for product in PRODUCTS:
-            if normalize_text(product["name"]) in text_normalized:
-                return product
-        return None
+    def detect_product_in_text(self, db: Session, text: str) -> Dict[str, Any] | None:
+        return catalog_repo.detect_product_in_text(db, text)
 
 
 product_service = ProductService()
