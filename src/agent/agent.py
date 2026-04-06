@@ -1,7 +1,7 @@
 import time
 from typing import Any, Dict, List, Optional
 
-from src.agent.parser import extract_city, extract_coupon, extract_product, extract_quantity
+from src.agent.parser import parse_react_response
 from src.agent.prompts import build_react_system_prompt
 from src.agent.tools_registry import get_tools, preview_result, render_tool_descriptions
 from src.core.config import get_settings
@@ -12,7 +12,7 @@ from src.telemetry.trace_store import trace_store
 
 
 class ReActAgent:
-    """Runnable skeleton of a ReAct-style agent using deterministic tool selection."""
+    """Runnable standard ReAct-style agent using LLM for tool selection and planning."""
 
     def __init__(self, llm: Optional[LLMProvider] = None, tools: Optional[List[Dict[str, Any]]] = None, max_steps: int = 5):
         self.llm = llm or build_provider()
@@ -29,86 +29,77 @@ class ReActAgent:
 
         tool_calls: List[Dict[str, Any]] = []
         steps = 0
-        subtotal = 0
-        discount_amount = 0
-        shipping_fee = 0
+        scratchpad = f"User: {user_input}\n"
+        system_prompt = self.get_system_prompt()
 
-        product = extract_product(user_input)
-        quantity = extract_quantity(user_input)
-        coupon_code = extract_coupon(user_input)
-        city = extract_city(user_input)
-
-        if not product:
-            answer = "Tôi chưa xác định được sản phẩm trong yêu cầu. Hãy nhập đúng tên sản phẩm trong catalog."
-            latency_ms = int((time.time() - started_at) * 1000)
-            trace = trace_store.finalize_trace(
-                trace,
-                final_answer=answer,
-                status="error",
-                metrics={"latency_ms": latency_ms, "tool_calls_count": 0, "steps": 0},
-                error_code="PRODUCT_NOT_FOUND",
-            )
-            return {
-                "version": "v2",
-                "answer": answer,
-                "latency_ms": latency_ms,
-                "steps": 0,
-                "tool_calls": [],
-                "trace_id": trace["trace_id"],
-                "status": "error",
-                "error_code": "PRODUCT_NOT_FOUND",
-            }
-
-        plan = [
-            ("get_product_price", {"product_name": product["name"]}, "Tôi cần lấy đơn giá sản phẩm."),
-            ("check_stock", {"product_name": product["name"], "quantity": quantity}, "Tôi cần kiểm tra tồn kho theo số lượng yêu cầu."),
-        ]
-        if coupon_code:
-            plan.append(("get_coupon_discount", {"coupon_code": coupon_code, "order_subtotal": product["price"] * quantity}, "Tôi cần xác thực mã giảm giá."))
-        if city:
-            plan.append(("calc_shipping", {"destination_city": city, "total_weight_kg": product["weight_kg"] * quantity}, "Tôi cần tính phí vận chuyển."))
-
-        for tool_name, args, thought in plan[: self.max_steps]:
+        while steps < self.max_steps:
             steps += 1
-            logger.log_event("AGENT_STEP_STARTED", {"trace_id": trace["trace_id"], "step": steps, "tool": tool_name})
+            logger.log_event("AGENT_STEP_STARTED", {"trace_id": trace["trace_id"], "step": steps})
+            
             try:
-                result = self._execute_tool(tool_name, args)
-            except ValueError as exc:
-                error_code = str(exc)
-                answer = f"Không thể hoàn tất yêu cầu vì lỗi: {error_code}."
-                return self._finalize(trace, answer, started_at, steps - 1, tool_calls, "error", error_code)
-            trace_store.append_step(
-                trace,
-                {
-                    "step": steps,
-                    "thought": thought,
-                    "action": {"tool": tool_name, "args": args},
-                    "observation": result,
-                },
-            )
-            tool_calls.append({"tool": tool_name, "args": args, "result_preview": preview_result(result)})
+                response = self.llm.generate(prompt=scratchpad, system_prompt=system_prompt)
+                text = response["content"]
+                
+                try:
+                    parsed = parse_react_response(text)
+                except Exception as exc:
+                    # Parsing threw exception (e.g., ValueError for bad JSON)
+                    observation = f"System Error parsing your response: {str(exc)}. Please strictly use valid JSON in 'Action Input'."
+                    scratchpad += f"{text}\nObservation: {observation}\n"
+                    # Log the failed step
+                    trace_store.append_step(trace, {"step": steps, "thought": text, "action": None, "observation": observation})
+                    continue
+                
+                thought = parsed.get("thought")
+                action = parsed.get("action")
+                final_answer = parsed.get("final_answer")
+                
+                if final_answer:
+                    # LLM has provided the final answer
+                    trace_store.append_step(trace, {"step": steps, "thought": thought, "action": None, "observation": final_answer})
+                    return self._finalize(trace, final_answer, started_at, steps, tool_calls, "success", None)
+                    
+                if action:
+                    tool_name, args = action
+                    has_error = False
+                    try:
+                        result = self._execute_tool(tool_name, args)
+                        observation = preview_result(result)
+                    except Exception as exc:
+                        result = f"Error executing tool {tool_name}: {str(exc)}"
+                        observation = result
+                        has_error = True
+                        
+                    trace_store.append_step(
+                        trace,
+                        {
+                            "step": steps,
+                            "thought": thought,
+                            "action": {"tool": tool_name, "args": args},
+                            "observation": result,
+                        },
+                    )
+                    
+                    if not has_error:
+                        tool_calls.append({"tool": tool_name, "args": args, "result_preview": observation})
+                        
+                    scratchpad += f"{text}\nObservation: {observation}\n"
+                    continue
+                    
+                # Neither action nor final answer found
+                observation = "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
+                scratchpad += f"{text}\nObservation: {observation}\n"
+                trace_store.append_step(trace, {"step": steps, "thought": thought or text, "action": None, "observation": observation})
 
-            if tool_name == "get_product_price":
-                subtotal = int(result["unit_price"]) * quantity
-            elif tool_name == "check_stock" and not result["in_stock"]:
-                answer = (
-                    f"{product['name']} hiện không đủ hàng. "
-                    f"Yêu cầu {quantity}, tồn kho còn {result['available_quantity']}."
-                )
-                return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "INSUFFICIENT_STOCK")
-            elif tool_name == "get_coupon_discount":
-                discount_amount = int(result["discount_amount"])
-            elif tool_name == "calc_shipping":
-                shipping_fee = int(result["shipping_fee"])
+            except Exception as e:
+                logger.log_event("AGENT_STEP_ERROR", {"trace_id": trace["trace_id"], "step": steps, "error": str(e)})
+                # Provide a generic fallback answer if provider fails
+                answer = "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau."
+                return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "PROVIDER_ERROR")
 
-        total_amount = subtotal - discount_amount + shipping_fee
-        answer = (
-            f"{product['name']} x {quantity}: subtotal {subtotal:,} VND. "
-            f"Giảm giá: {discount_amount:,} VND. "
-            f"Phí ship: {shipping_fee:,} VND. "
-            f"Tổng cộng: {total_amount:,} VND."
-        )
-        return self._finalize(trace, answer, started_at, steps, tool_calls, "success", None)
+        # Exceeded max steps
+        answer = "Tôi đã suy nghĩ quá giới hạn số bước nhưng chưa tìm được câu trả lời."
+        return self._finalize(trace, answer, started_at, steps, tool_calls, "error", "MAX_STEPS_REACHED")
 
     def _finalize(
         self,
