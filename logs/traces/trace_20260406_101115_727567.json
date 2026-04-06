@@ -1,0 +1,111 @@
+{
+  "trace_id": "trace_20260406_101115_727567",
+  "version": "v2",
+  "session_id": null,
+  "user_query": "MacBook Air M3 c?n h?ng kh?ng? N?u mua 1 c?i ship TP.HCM th? h?t bao nhi?u?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "mock",
+      "model": "test-mock",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 0,
+      "raw_model_output": "Thought: Tôi cần lấy đơn giá sản phẩm trước.\nAction: get_product_price\nAction Input: {\"product_name\": \"MacBook Air M3\"}",
+      "thought": "Tôi cần lấy đơn giá sản phẩm trước.",
+      "action": {
+        "tool": "get_product_price",
+        "args": {
+          "product_name": "MacBook Air M3"
+        }
+      },
+      "observation": {
+        "product_name": "MacBook Air M3",
+        "unit_price": 28990000,
+        "currency": "VND"
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 2,
+      "provider": "mock",
+      "model": "test-mock",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 0,
+      "raw_model_output": "Thought: Tôi cần kiểm tra tồn kho cho số lượng người dùng yêu cầu.\nAction: check_stock\nAction Input: {\"product_name\": \"MacBook Air M3\", \"quantity\": 3}",
+      "thought": "Tôi cần kiểm tra tồn kho cho số lượng người dùng yêu cầu.",
+      "action": {
+        "tool": "check_stock",
+        "args": {
+          "product_name": "MacBook Air M3",
+          "quantity": 3
+        }
+      },
+      "observation": {
+        "product_name": "MacBook Air M3",
+        "requested_quantity": 3,
+        "available_quantity": 4,
+        "in_stock": true
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 3,
+      "provider": "mock",
+      "model": "test-mock",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "latency_ms": 0,
+      "raw_model_output": "Thought: Tôi cần tính phí vận chuyển theo thành phố và cân nặng.\nAction: calc_shipping\nAction Input: {\"destination_city\": \"TP.HCM\", \"total_weight_kg\": 3.9000000000000004}",
+      "thought": "Tôi cần tính phí vận chuyển theo thành phố và cân nặng.",
+      "action": {
+        "tool": "calc_shipping",
+        "args": {
+          "destination_city": "TP.HCM",
+          "total_weight_kg": 1.3
+        }
+      },
+      "observation": {
+        "destination_city": "TP.HCM",
+        "shipping_fee": 59000,
+        "estimated_days": 2
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 3.1,
+      "thought": "Đã đủ dữ liệu từ tools, tổng hợp câu trả lời trực tiếp từ observation.",
+      "action": null,
+      "observation": "MacBook Air M3 có đơn giá 28,990,000 VND. Subtotal cho 1 sản phẩm là 28,990,000 VND. Tồn kho hiện tại: 4. Đủ hàng cho yêu cầu: có. Phí ship đến TP.HCM: 59,000 VND, dự kiến 2 ngày. Tổng thanh toán dự kiến: 29,049,000 VND.",
+      "status": "auto_final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 10,
+    "tool_calls_count": 3,
+    "steps": 4,
+    "provider": "mock",
+    "model": "test-mock",
+    "llm_calls": 3,
+    "token_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "cost_estimate": 0.0,
+    "llm_latency_ms": 0
+  },
+  "final_answer": "MacBook Air M3 có đơn giá 28,990,000 VND. Subtotal cho 1 sản phẩm là 28,990,000 VND. Tồn kho hiện tại: 4. Đủ hàng cho yêu cầu: có. Phí ship đến TP.HCM: 59,000 VND, dự kiến 2 ngày. Tổng thanh toán dự kiến: 29,049,000 VND.",
+  "error_code": null
+}

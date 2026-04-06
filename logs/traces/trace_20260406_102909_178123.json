@@ -1,0 +1,33 @@
+{
+  "trace_id": "trace_20260406_102909_178123",
+  "version": "v2",
+  "session_id": "benchmark-case_3",
+  "user_query": "Tôi muốn mua 2 iPhone 15, dùng mã WINNER10 và ship Hà Nội. Tổng bao nhiêu?",
+  "status": "error",
+  "steps": [
+    {
+      "step": 1,
+      "thought": "Provider call failed.",
+      "action": null,
+      "observation": "Connection error.",
+      "status": "provider_error"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 1282,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 0,
+    "token_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "cost_estimate": 0.0,
+    "llm_latency_ms": 0
+  },
+  "final_answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+  "error_code": "PROVIDER_ERROR"
+}

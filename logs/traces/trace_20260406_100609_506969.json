@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_100609_506969",
+  "version": "v2",
+  "session_id": "streamlit-demo",
+  "user_query": "giá bitcoin hiện tại",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 354,
+        "completion_tokens": 73,
+        "total_tokens": 427
+      },
+      "latency_ms": 2526,
+      "raw_model_output": "Thought: I will check the current unit price of Bitcoin as requested. However, I don't have the ability to check cryptocurrency prices directly. Let me know if there is another product or inquiry I can assist you with. \nFinal Answer: Tôi không thể cung cấp giá Bitcoin hiện tại. Tuy nhiên, tôi có thể hỗ trợ các yêu cầu khác nếu bạn cần.",
+      "thought": "I will check the current unit price of Bitcoin as requested. However, I don't have the ability to check cryptocurrency prices directly. Let me know if there is another product or inquiry I can assist you with.",
+      "action": null,
+      "observation": "Tôi không thể cung cấp giá Bitcoin hiện tại. Tuy nhiên, tôi có thể hỗ trợ các yêu cầu khác nếu bạn cần.",
+      "status": "final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2527,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 354,
+      "completion_tokens": 73,
+      "total_tokens": 427
+    },
+    "cost_estimate": 0.00427,
+    "llm_latency_ms": 2526
+  },
+  "final_answer": "Tôi không thể cung cấp giá Bitcoin hiện tại. Tuy nhiên, tôi có thể hỗ trợ các yêu cầu khác nếu bạn cần.",
+  "error_code": null
+}

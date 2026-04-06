@@ -1,0 +1,60 @@
+{
+  "trace_id": "trace_20260406_093211_258641",
+  "version": "v2",
+  "session_id": "runtime-case_5",
+  "user_query": "Mua 3 AirPods Pro 2 d?ng m? SAVE999 ship ?? N?ng.",
+  "status": "error",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 271,
+        "completion_tokens": 81,
+        "total_tokens": 352
+      },
+      "latency_ms": 2061,
+      "raw_model_output": "Thought: I need to check the stock for 3 AirPods Pro 2 first, then I will verify the coupon SAVE999 if there's any discount applicable, and finally calculate the shipping cost to Đà Nẵng after determining the total weight and final price if necessary. \n\nAction: check_stock  \nAction Input: {\"product_name\": \"AirPods Pro 2\", \"quantity\": 3}",
+      "thought": "I need to check the stock for 3 AirPods Pro 2 first, then I will verify the coupon SAVE999 if there's any discount applicable, and finally calculate the shipping cost to Đà Nẵng after determining the total weight and final price if necessary.",
+      "action": {
+        "tool": "check_stock",
+        "args": {
+          "product_name": "AirPods Pro 2",
+          "quantity": 3
+        }
+      },
+      "observation": {
+        "product_name": "AirPods Pro 2",
+        "requested_quantity": 3,
+        "available_quantity": 20,
+        "in_stock": true
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 2,
+      "thought": "Provider call failed.",
+      "action": null,
+      "observation": "Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************diUA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}",
+      "status": "provider_error"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2368,
+    "tool_calls_count": 1,
+    "steps": 2,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 271,
+      "completion_tokens": 81,
+      "total_tokens": 352
+    },
+    "cost_estimate": 0.0035199999999999997,
+    "llm_latency_ms": 2061
+  },
+  "final_answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+  "error_code": "PROVIDER_ERROR"
+}

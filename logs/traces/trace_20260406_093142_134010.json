@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_093142_134010",
+  "version": "v2",
+  "session_id": "runtime-case_1",
+  "user_query": "Ch?nh s?ch ??i tr? l? g??",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 263,
+        "completion_tokens": 124,
+        "total_tokens": 387
+      },
+      "latency_ms": 9036,
+      "raw_model_output": "Thought: Tôi cần thông tin về chính sách đổi trả hàng để có thể cung cấp cho người dùng. Hãy kiểm tra trang web chính thức của cửa hàng hoặc liên hệ với bộ phận hỗ trợ khách hàng nếu có thể, nhưng tôi không có quyền truy cập vào thông tin đó. Do đó, tôi không thể cung cấp câu trả lời đúng theo yêu cầu. \nFinal Answer: Xin lỗi, tôi không thể cung cấp thông tin về chính sách đổi trả hàng. Bạn nên kiểm tra trang web chính thức của cửa hàng hoặc liên hệ với bộ phận hỗ trợ khách hàng để biết thêm chi tiết.",
+      "thought": "Tôi cần thông tin về chính sách đổi trả hàng để có thể cung cấp cho người dùng. Hãy kiểm tra trang web chính thức của cửa hàng hoặc liên hệ với bộ phận hỗ trợ khách hàng nếu có thể, nhưng tôi không có quyền truy cập vào thông tin đó. Do đó, tôi không thể cung cấp câu trả lời đúng theo yêu cầu.",
+      "action": null,
+      "observation": "Xin lỗi, tôi không thể cung cấp thông tin về chính sách đổi trả hàng. Bạn nên kiểm tra trang web chính thức của cửa hàng hoặc liên hệ với bộ phận hỗ trợ khách hàng để biết thêm chi tiết.",
+      "status": "final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 9036,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 263,
+      "completion_tokens": 124,
+      "total_tokens": 387
+    },
+    "cost_estimate": 0.00387,
+    "llm_latency_ms": 9036
+  },
+  "final_answer": "Xin lỗi, tôi không thể cung cấp thông tin về chính sách đổi trả hàng. Bạn nên kiểm tra trang web chính thức của cửa hàng hoặc liên hệ với bộ phận hỗ trợ khách hàng để biết thêm chi tiết.",
+  "error_code": null
+}

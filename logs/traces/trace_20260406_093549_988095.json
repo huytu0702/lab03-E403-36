@@ -1,0 +1,28 @@
+{
+  "trace_id": "trace_20260406_093549_988095",
+  "version": "v1",
+  "session_id": "benchmark-v1",
+  "user_query": "Mua 3 AirPods Pro 2 dùng mã SAVE999 ship Đà Nẵng.",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "context_sources": [
+        "product:AirPods Pro 2"
+      ],
+      "llm_mode": "single_pass"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "rule-based",
+    "model": "grounded-retrieval",
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+  },
+  "final_answer": "Thông tin AirPods Pro 2:\n- Giá: 5,490,000 VND\n- Tồn kho (ước tính): 20\n- Mô tả: Apple AirPods Pro 2nd generation.\n\nNếu bạn cần kiểm tra mã giảm giá hoặc tính phí ship theo thành phố, hãy chọn version v2.",
+  "error_code": null
+}

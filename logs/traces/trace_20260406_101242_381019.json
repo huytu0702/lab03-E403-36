@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_101242_381019",
+  "version": "v2",
+  "session_id": "streamlit-demo",
+  "user_query": "giá bitcoin hiện tại",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 354,
+        "completion_tokens": 79,
+        "total_tokens": 433
+      },
+      "latency_ms": 2719,
+      "raw_model_output": "Thought: Tôi không thể kiểm tra giá của Bitcoin trực tiếp, nhưng tôi có thể giúp bạn với thông tin về sản phẩm khác hoặc các câu hỏi liên quan đến giao dịch trực tuyến. Bạn cần hỗ trợ gì khác không? \nFinal Answer: Tôi không thể cung cấp giá Bitcoin hiện tại, nhưng nếu bạn cần thông tin về sản phẩm hoặc dịch vụ khác, hãy cho tôi biết!",
+      "thought": "Tôi không thể kiểm tra giá của Bitcoin trực tiếp, nhưng tôi có thể giúp bạn với thông tin về sản phẩm khác hoặc các câu hỏi liên quan đến giao dịch trực tuyến. Bạn cần hỗ trợ gì khác không?",
+      "action": null,
+      "observation": "Tôi không thể cung cấp giá Bitcoin hiện tại, nhưng nếu bạn cần thông tin về sản phẩm hoặc dịch vụ khác, hãy cho tôi biết!",
+      "status": "final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2722,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 354,
+      "completion_tokens": 79,
+      "total_tokens": 433
+    },
+    "cost_estimate": 0.00433,
+    "llm_latency_ms": 2719
+  },
+  "final_answer": "Tôi không thể cung cấp giá Bitcoin hiện tại, nhưng nếu bạn cần thông tin về sản phẩm hoặc dịch vụ khác, hãy cho tôi biết!",
+  "error_code": null
+}

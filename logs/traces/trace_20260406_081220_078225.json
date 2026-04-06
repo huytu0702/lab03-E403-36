@@ -1,0 +1,23 @@
+{
+  "trace_id": "trace_20260406_081220_078225",
+  "version": "v1",
+  "session_id": null,
+  "user_query": "Ch?nh s?ch ??i tr? l? g??",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "context_sources": [
+        "none"
+      ],
+      "llm_mode": "single_pass"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 0,
+    "tool_calls_count": 0,
+    "steps": 1
+  },
+  "final_answer": "This is a mock provider response. Use FAQ lookup for v1 or tool orchestration for v2 in local development.",
+  "error_code": null
+}

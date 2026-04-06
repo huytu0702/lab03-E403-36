@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_093151_195463",
+  "version": "v2",
+  "session_id": "runtime-case_2",
+  "user_query": "Shop c? giao h?ng cu?i tu?n kh?ng?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 265,
+        "completion_tokens": 83,
+        "total_tokens": 348
+      },
+      "latency_ms": 2908,
+      "raw_model_output": "Thought: Tôi cần xác định xem cửa hàng có cung cấp dịch vụ giao hàng vào cuối tuần hay không. Tuy nhiên, tôi không biết tên cửa hàng cụ thể để xác minh. Nếu bạn có tên cửa hàng cụ thể, tôi có thể giúp kiểm tra thông tin giao hàng cho bạn. \nFinal Answer: Có thể bạn cần cung cấp tên cửa hàng cụ thể để tôi kiểm tra thông tin giao hàng.",
+      "thought": "Tôi cần xác định xem cửa hàng có cung cấp dịch vụ giao hàng vào cuối tuần hay không. Tuy nhiên, tôi không biết tên cửa hàng cụ thể để xác minh. Nếu bạn có tên cửa hàng cụ thể, tôi có thể giúp kiểm tra thông tin giao hàng cho bạn.",
+      "action": null,
+      "observation": "Có thể bạn cần cung cấp tên cửa hàng cụ thể để tôi kiểm tra thông tin giao hàng.",
+      "status": "final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2909,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 265,
+      "completion_tokens": 83,
+      "total_tokens": 348
+    },
+    "cost_estimate": 0.00348,
+    "llm_latency_ms": 2908
+  },
+  "final_answer": "Có thể bạn cần cung cấp tên cửa hàng cụ thể để tôi kiểm tra thông tin giao hàng.",
+  "error_code": null
+}

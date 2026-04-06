@@ -1,0 +1,93 @@
+{
+  "trace_id": "trace_20260406_093640_672141",
+  "version": "v2",
+  "session_id": "pytest-v2",
+  "user_query": "Tôi muốn mua 2 iPhone 15, dùng mã WINNER10 và ship Hà Nội. Tổng bao nhiêu?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "thought": "Tôi cần lấy đơn giá sản phẩm trước.",
+      "action": {
+        "tool": "get_product_price",
+        "args": {
+          "product_name": "iPhone 15"
+        }
+      },
+      "observation": {
+        "product_name": "iPhone 15",
+        "unit_price": 24990000,
+        "currency": "VND"
+      }
+    },
+    {
+      "step": 2,
+      "thought": "Tôi cần kiểm tra tồn kho cho số lượng khách yêu cầu.",
+      "action": {
+        "tool": "check_stock",
+        "args": {
+          "product_name": "iPhone 15",
+          "quantity": 2
+        }
+      },
+      "observation": {
+        "product_name": "iPhone 15",
+        "requested_quantity": 2,
+        "available_quantity": 12,
+        "in_stock": true
+      }
+    },
+    {
+      "step": 3,
+      "thought": "Tôi cần kiểm tra mã giảm giá trên đơn hàng này.",
+      "action": {
+        "tool": "get_coupon_discount",
+        "args": {
+          "coupon_code": "WINNER10",
+          "order_subtotal": 49980000
+        }
+      },
+      "observation": {
+        "coupon_code": "WINNER10",
+        "is_valid": true,
+        "discount_type": "percent",
+        "discount_value": 10.0,
+        "discount_amount": 3000000
+      }
+    },
+    {
+      "step": 4,
+      "thought": "Tôi cần tính phí ship theo thành phố giao hàng.",
+      "action": {
+        "tool": "calc_shipping",
+        "args": {
+          "destination_city": "Hà Nội",
+          "total_weight_kg": 1.0
+        }
+      },
+      "observation": {
+        "destination_city": "Hà Nội",
+        "shipping_fee": 40000,
+        "estimated_days": 2
+      }
+    },
+    {
+      "step": 5,
+      "thought": "Tôi đã đủ dữ liệu từ các tools để trả lời.",
+      "action": null,
+      "observation": "iPhone 15 còn hàng cho số lượng 2 (hiện có 12). Đơn giá: 24,990,000 VND. Tạm tính: 49,980,000 VND. Mã WINNER10 giảm 3,000,000 VND. Phí ship tới Hà Nội: 40,000 VND (dự kiến 2 ngày). Tổng thanh toán dự kiến: 47,020,000 VND."
+    }
+  ],
+  "metrics": {
+    "latency_ms": 13,
+    "tool_calls_count": 4,
+    "steps": 5,
+    "provider": "mock",
+    "model": "gpt-4o-mini",
+    "prompt_tokens": 367,
+    "completion_tokens": 134,
+    "total_tokens": 501
+  },
+  "final_answer": "iPhone 15 còn hàng cho số lượng 2 (hiện có 12). Đơn giá: 24,990,000 VND. Tạm tính: 49,980,000 VND. Mã WINNER10 giảm 3,000,000 VND. Phí ship tới Hà Nội: 40,000 VND (dự kiến 2 ngày). Tổng thanh toán dự kiến: 47,020,000 VND.",
+  "error_code": null
+}

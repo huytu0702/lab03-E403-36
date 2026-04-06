@@ -1,0 +1,23 @@
+{
+  "trace_id": "trace_20260406_081306_299940",
+  "version": "v1",
+  "session_id": null,
+  "user_query": "Chinh sach doi tra la gi?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "context_sources": [
+        "faq:return_policy"
+      ],
+      "llm_mode": "single_pass"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2,
+    "tool_calls_count": 0,
+    "steps": 1
+  },
+  "final_answer": "Bạn có thể đổi trả trong vòng 7 ngày nếu sản phẩm còn nguyên hộp và chưa kích hoạt bảo hành điện tử.",
+  "error_code": null
+}

@@ -1,0 +1,61 @@
+{
+  "trace_id": "trace_20260406_100607_258619",
+  "version": "v1",
+  "session_id": "streamlit-demo",
+  "user_query": "giá bitcoin hiện tại",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "phase": "faq_lookup",
+      "thought": "Kiểm tra FAQ trước vì đây là đường trả lời rẻ và nhanh nhất của v1.",
+      "context_sources": [],
+      "decision": "faq_miss"
+    },
+    {
+      "step": 2,
+      "phase": "product_lookup",
+      "thought": "Không match FAQ, thử tìm sản phẩm trong câu hỏi để trả thông tin catalog cơ bản.",
+      "context_sources": [],
+      "decision": "product_miss"
+    },
+    {
+      "step": 3,
+      "phase": "llm_fallback",
+      "thought": "Không có grounding từ FAQ hay product catalog, fallback sang single-pass LLM.",
+      "provider": "openai",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "step": 4,
+      "phase": "llm_response",
+      "thought": "LLM đã tạo câu trả lời cuối cùng cho truy vấn chưa có grounding trực tiếp.",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 84,
+        "completion_tokens": 42,
+        "total_tokens": 126
+      },
+      "latency_ms": 2246,
+      "final_answer_preview": "Xin lỗi, nhưng tôi không thể cung cấp thông tin về giá bitcoin hiện tại. Bạn có thể kiểm tra trên các trang web giao dịch tiền điện tử hoặc cửa hàng tài chính để xem giá cập nhật."
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2248,
+    "tool_calls_count": 0,
+    "steps": 4,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 84,
+      "completion_tokens": 42,
+      "total_tokens": 126
+    },
+    "cost_estimate": 0.00126,
+    "llm_latency_ms": 2246
+  },
+  "final_answer": "Xin lỗi, nhưng tôi không thể cung cấp thông tin về giá bitcoin hiện tại. Bạn có thể kiểm tra trên các trang web giao dịch tiền điện tử hoặc cửa hàng tài chính để xem giá cập nhật.",
+  "error_code": null
+}

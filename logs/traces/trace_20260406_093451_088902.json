@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_093451_088902",
+  "version": "v2",
+  "session_id": "rerun-case_1",
+  "user_query": "Ch?nh s?ch ??i tr? l? g??",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 263,
+        "completion_tokens": 129,
+        "total_tokens": 392
+      },
+      "latency_ms": 4175,
+      "raw_model_output": "Thought: Tôi cần kiểm tra thông tin về chế độ đổi trả hàng để cung cấp thông tin chính xác cho người dùng. Vì vậy, tôi sẽ trả lời rằng chính sách đổi trả hàng có thể khác nhau tùy theo từng cửa hàng hoặc nền tảng thương mại điện tử. Tôi sẽ nhắc nhở người dùng cần xem xét chính sách của nhà cung cấp cụ thể mà họ đang giao dịch. \n\nFinal Answer: Chính sách đổi trả hàng thường khác nhau tùy vào từng cửa hàng hoặc nền tảng thương mại điện tử. Bạn nên kiểm tra chính sách cụ thể từ nơi bạn đã mua hàng để biết thêm chi tiết.",
+      "thought": "Tôi cần kiểm tra thông tin về chế độ đổi trả hàng để cung cấp thông tin chính xác cho người dùng. Vì vậy, tôi sẽ trả lời rằng chính sách đổi trả hàng có thể khác nhau tùy theo từng cửa hàng hoặc nền tảng thương mại điện tử. Tôi sẽ nhắc nhở người dùng cần xem xét chính sách của nhà cung cấp cụ thể mà họ đang giao dịch.",
+      "action": null,
+      "observation": "Chính sách đổi trả hàng thường khác nhau tùy vào từng cửa hàng hoặc nền tảng thương mại điện tử. Bạn nên kiểm tra chính sách cụ thể từ nơi bạn đã mua hàng để biết thêm chi tiết.",
+      "status": "final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 4176,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 263,
+      "completion_tokens": 129,
+      "total_tokens": 392
+    },
+    "cost_estimate": 0.00392,
+    "llm_latency_ms": 4175
+  },
+  "final_answer": "Chính sách đổi trả hàng thường khác nhau tùy vào từng cửa hàng hoặc nền tảng thương mại điện tử. Bạn nên kiểm tra chính sách cụ thể từ nơi bạn đã mua hàng để biết thêm chi tiết.",
+  "error_code": null
+}

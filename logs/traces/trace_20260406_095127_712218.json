@@ -1,0 +1,58 @@
+{
+  "trace_id": "trace_20260406_095127_712218",
+  "version": "v2",
+  "session_id": "fixed4-case_2",
+  "user_query": "Shop có giao hàng cuối tuần không?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 357,
+        "completion_tokens": 42,
+        "total_tokens": 399
+      },
+      "latency_ms": 1893,
+      "raw_model_output": "Thought: I need to check the FAQ to see if the shop offers weekend shipping. \nAction: get_faq_answer\nAction Input: {\"user_message\": \"Shop có giao hàng cuối tuần không?\"}",
+      "thought": "I need to check the FAQ to see if the shop offers weekend shipping.",
+      "action": {
+        "tool": "get_faq_answer",
+        "args": {
+          "user_message": "Shop có giao hàng cuối tuần không?"
+        }
+      },
+      "observation": {
+        "topic": "weekend_shipping",
+        "question": "Shop có giao hàng cuối tuần không?",
+        "answer": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo."
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 1.1,
+      "thought": "Đã đủ dữ liệu từ tools, tổng hợp câu trả lời trực tiếp từ observation.",
+      "action": null,
+      "observation": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo.",
+      "status": "auto_final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 1898,
+    "tool_calls_count": 1,
+    "steps": 2,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 357,
+      "completion_tokens": 42,
+      "total_tokens": 399
+    },
+    "cost_estimate": 0.0039900000000000005,
+    "llm_latency_ms": 1893
+  },
+  "final_answer": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo.",
+  "error_code": null
+}

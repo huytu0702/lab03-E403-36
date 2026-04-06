@@ -1,0 +1,46 @@
+{
+  "trace_id": "trace_20260406_092149_024217",
+  "version": "v2",
+  "session_id": "debug",
+  "user_query": "Tôi muốn mua 2 iPhone 15, dùng mã WINNER10 và ship Hà Nội.",
+  "status": "error",
+  "steps": [
+    {
+      "step": 1,
+      "thought": "This is a mock provider response. Use FAQ lookup for v1 or tool orchestration for v2 in local development.",
+      "action": null,
+      "observation": "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
+    },
+    {
+      "step": 2,
+      "thought": "This is a mock provider response. Use FAQ lookup for v1 or tool orchestration for v2 in local development.",
+      "action": null,
+      "observation": "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
+    },
+    {
+      "step": 3,
+      "thought": "This is a mock provider response. Use FAQ lookup for v1 or tool orchestration for v2 in local development.",
+      "action": null,
+      "observation": "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
+    },
+    {
+      "step": 4,
+      "thought": "This is a mock provider response. Use FAQ lookup for v1 or tool orchestration for v2 in local development.",
+      "action": null,
+      "observation": "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
+    },
+    {
+      "step": 5,
+      "thought": "This is a mock provider response. Use FAQ lookup for v1 or tool orchestration for v2 in local development.",
+      "action": null,
+      "observation": "Error parsing action, you must provide 'Action' and 'Action Input', or 'Final Answer'."
+    }
+  ],
+  "metrics": {
+    "latency_ms": 3,
+    "tool_calls_count": 0,
+    "steps": 5
+  },
+  "final_answer": "Tôi đã suy nghĩ quá giới hạn số bước nhưng chưa tìm được câu trả lời.",
+  "error_code": "MAX_STEPS_REACHED"
+}

@@ -1,0 +1,27 @@
+{
+  "trace_id": "trace_20260406_093246_913853",
+  "version": "v2",
+  "session_id": "benchmark-v2",
+  "user_query": "Chính sách đổi trả là gì?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "thought": "Đây là câu hỏi FAQ đơn giản.",
+      "action": null,
+      "observation": "Bạn có thể đổi trả trong vòng 7 ngày nếu sản phẩm còn nguyên hộp và chưa kích hoạt bảo hành điện tử."
+    }
+  ],
+  "metrics": {
+    "latency_ms": 4,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "mock",
+    "model": "gpt-4o-mini",
+    "prompt_tokens": 7,
+    "completion_tokens": 33,
+    "total_tokens": 40
+  },
+  "final_answer": "Bạn có thể đổi trả trong vòng 7 ngày nếu sản phẩm còn nguyên hộp và chưa kích hoạt bảo hành điện tử.",
+  "error_code": null
+}
