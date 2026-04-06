@@ -6,6 +6,7 @@ from typing import Any, Dict
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from src.core.text import normalize_text
 from src.db import models
 
 
@@ -20,16 +21,16 @@ class PricingRepository:
         )
 
     def get_shipping_rule(self, db: Session, destination_city: str) -> models.ShippingRule | None:
-        return (
-            db.execute(
-                select(models.ShippingRule)
-                .where(models.ShippingRule.city.ilike(destination_city.strip()))
-                .where(models.ShippingRule.is_active.is_(True))
-                .limit(1)
-            )
+        target = normalize_text(destination_city)
+        rules = (
+            db.execute(select(models.ShippingRule).where(models.ShippingRule.is_active.is_(True)))
             .scalars()
-            .first()
+            .all()
         )
+        for rule in rules:
+            if normalize_text(rule.city) == target:
+                return rule
+        return None
 
     def coupon_to_dict(self, coupon: models.Coupon) -> Dict[str, Any]:
         return {
