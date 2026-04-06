@@ -1,0 +1,27 @@
+{
+  "trace_id": "trace_20260406_093249_004781",
+  "version": "v2",
+  "session_id": "benchmark-v2",
+  "user_query": "Shop có giao hàng cuối tuần không?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "thought": "Đây là câu hỏi FAQ đơn giản.",
+      "action": null,
+      "observation": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo."
+    }
+  ],
+  "metrics": {
+    "latency_ms": 3,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "mock",
+    "model": "gpt-4o-mini",
+    "prompt_tokens": 8,
+    "completion_tokens": 35,
+    "total_tokens": 43
+  },
+  "final_answer": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo.",
+  "error_code": null
+}

@@ -1,0 +1,58 @@
+{
+  "trace_id": "trace_20260406_103021_432069",
+  "version": "v2",
+  "session_id": "benchmark-case_2",
+  "user_query": "Shop có giao hàng cuối tuần không?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 357,
+        "completion_tokens": 53,
+        "total_tokens": 410
+      },
+      "latency_ms": 1724,
+      "raw_model_output": "Thought: I need to find out the shop's shipping policies regarding weekend delivery. To get the most accurate information, I'll use the FAQ tool.\nAction: get_faq_answer\nAction Input: {\"user_message\": \"Shop có giao hàng cuối tuần không?\"}",
+      "thought": "I need to find out the shop's shipping policies regarding weekend delivery. To get the most accurate information, I'll use the FAQ tool.",
+      "action": {
+        "tool": "get_faq_answer",
+        "args": {
+          "user_message": "Shop có giao hàng cuối tuần không?"
+        }
+      },
+      "observation": {
+        "topic": "weekend_shipping",
+        "question": "Shop có giao hàng cuối tuần không?",
+        "answer": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo."
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 1.1,
+      "thought": "Đã đủ dữ liệu từ tools, tổng hợp câu trả lời trực tiếp từ observation.",
+      "action": null,
+      "observation": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo.",
+      "status": "auto_final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 1727,
+    "tool_calls_count": 1,
+    "steps": 2,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 357,
+      "completion_tokens": 53,
+      "total_tokens": 410
+    },
+    "cost_estimate": 0.0040999999999999995,
+    "llm_latency_ms": 1724
+  },
+  "final_answer": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo.",
+  "error_code": null
+}

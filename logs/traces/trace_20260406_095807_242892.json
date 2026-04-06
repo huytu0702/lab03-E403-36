@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_095807_242892",
+  "version": "v1",
+  "session_id": "streamlit-demo",
+  "user_query": "Tôi muốn mua 2 iPhone 15, dùng mã WINNER10 và ship Hà Nội. Tổng bao nhiêu?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "phase": "faq_lookup",
+      "thought": "Kiểm tra FAQ trước vì đây là đường trả lời rẻ và nhanh nhất của v1.",
+      "context_sources": [],
+      "decision": "faq_miss"
+    },
+    {
+      "step": 2,
+      "phase": "product_lookup",
+      "thought": "Không match FAQ, thử tìm sản phẩm trong câu hỏi để trả thông tin catalog cơ bản.",
+      "context_sources": [
+        "product:iPhone 15"
+      ],
+      "decision": "product_hit"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 5,
+    "tool_calls_count": 0,
+    "steps": 2,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 0,
+    "token_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "cost_estimate": 0.0,
+    "llm_latency_ms": 0
+  },
+  "final_answer": "Thông tin iPhone 15:\n- Giá: 24,990,000 VND\n- Tồn kho (ước tính): 12\n- Mô tả: Apple iPhone 15 128GB.\n\nNếu bạn cần kiểm tra mã giảm giá hoặc tính phí ship theo thành phố, hãy xem thêm kết quả v2.",
+  "error_code": null
+}

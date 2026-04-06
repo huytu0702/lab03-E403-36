@@ -1,0 +1,35 @@
+{
+  "trace_id": "trace_20260406_093455_289251",
+  "version": "v1",
+  "session_id": "rerun-case_2",
+  "user_query": "Shop c? giao h?ng cu?i tu?n kh?ng?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "phase": "faq_lookup",
+      "thought": "Kiểm tra FAQ trước vì đây là đường trả lời rẻ và nhanh nhất của v1.",
+      "context_sources": [
+        "faq:weekend_shipping"
+      ],
+      "decision": "faq_hit"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 1,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 0,
+    "token_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "cost_estimate": 0.0,
+    "llm_latency_ms": 0
+  },
+  "final_answer": "Shop v?n giao h?ng cu?i tu?n t?i H? N?i v? TP.HCM. M?t s? khu v?c kh?c s? x? l? v?o ng?y l?m vi?c ti?p theo.",
+  "error_code": null
+}

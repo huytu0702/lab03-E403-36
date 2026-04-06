@@ -1,0 +1,61 @@
+{
+  "trace_id": "trace_20260406_101826_028022",
+  "version": "v1",
+  "session_id": "codex-smoke",
+  "user_query": "Thời tiết hôm nay thế nào?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "phase": "faq_lookup",
+      "thought": "Kiểm tra FAQ trước vì đây là đường trả lời rẻ và nhanh nhất của v1.",
+      "context_sources": [],
+      "decision": "faq_miss"
+    },
+    {
+      "step": 2,
+      "phase": "product_lookup",
+      "thought": "Không match FAQ, thử tìm sản phẩm trong câu hỏi để trả thông tin catalog cơ bản.",
+      "context_sources": [],
+      "decision": "product_miss"
+    },
+    {
+      "step": 3,
+      "phase": "llm_fallback",
+      "thought": "Không có grounding từ FAQ hay product catalog, fallback sang single-pass LLM.",
+      "provider": "openai",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "step": 4,
+      "phase": "llm_response",
+      "thought": "LLM đã tạo câu trả lời cuối cùng cho truy vấn chưa có grounding trực tiếp.",
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 87,
+        "completion_tokens": 46,
+        "total_tokens": 133
+      },
+      "latency_ms": 1739,
+      "final_answer_preview": "Xin lỗi, tôi không có khả năng cung cấp thông tin thời tiết. Tuy nhiên, bạn có thể xem dự báo thời tiết trên các trang web hoặc ứng dụng thời tiết. Cần hỗ trợ gì về sản phẩm không?"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 1742,
+    "tool_calls_count": 0,
+    "steps": 4,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 87,
+      "completion_tokens": 46,
+      "total_tokens": 133
+    },
+    "cost_estimate": 0.00133,
+    "llm_latency_ms": 1739
+  },
+  "final_answer": "Xin lỗi, tôi không có khả năng cung cấp thông tin thời tiết. Tuy nhiên, bạn có thể xem dự báo thời tiết trên các trang web hoặc ứng dụng thời tiết. Cần hỗ trợ gì về sản phẩm không?",
+  "error_code": null
+}

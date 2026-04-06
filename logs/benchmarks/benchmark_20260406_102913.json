@@ -1,0 +1,212 @@
+{
+  "generated_at": "2026-04-06T10:29:13.185474+00:00",
+  "case_count": 5,
+  "auxiliary_case_count": 1,
+  "cases": [
+    {
+      "case_id": "case_1",
+      "title": "FAQ đổi trả",
+      "message": "Chính sách đổi trả là gì?",
+      "expected": "Trả lời đúng theo FAQ đổi trả, không bịa thêm chính sách.",
+      "expected_winner": "v1",
+      "actual_winner": "v1",
+      "v1": {
+        "status": "success",
+        "answer": "Bạn có thể đổi trả trong vòng 7 ngày nếu sản phẩm còn nguyên hộp và chưa kích hoạt bảo hành điện tử.",
+        "latency_ms": 8,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102906_069207",
+        "error_code": null,
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      },
+      "v2": {
+        "status": "error",
+        "answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+        "latency_ms": 1762,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102906_078443",
+        "error_code": "PROVIDER_ERROR",
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    },
+    {
+      "case_id": "case_2",
+      "title": "FAQ giao hàng cuối tuần",
+      "message": "Shop có giao hàng cuối tuần không?",
+      "expected": "Trả lời đúng theo FAQ giao hàng cuối tuần.",
+      "expected_winner": "v1",
+      "actual_winner": "v1",
+      "v1": {
+        "status": "success",
+        "answer": "Shop vẫn giao hàng cuối tuần tại Hà Nội và TP.HCM. Một số khu vực khác sẽ xử lý vào ngày làm việc tiếp theo.",
+        "latency_ms": 2,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102907_840681",
+        "error_code": null,
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      },
+      "v2": {
+        "status": "error",
+        "answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+        "latency_ms": 1329,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102907_842873",
+        "error_code": "PROVIDER_ERROR",
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    },
+    {
+      "case_id": "case_3",
+      "title": "Quote nhiều bước",
+      "message": "Tôi muốn mua 2 iPhone 15, dùng mã WINNER10 và ship Hà Nội. Tổng bao nhiêu?",
+      "expected": "Lấy giá, kiểm kho, áp coupon và tính ship để ra tổng cuối cùng.",
+      "expected_winner": "v2",
+      "actual_winner": "v1",
+      "v1": {
+        "status": "success",
+        "answer": "Thông tin iPhone 15:\n- Giá: 24,990,000 VND\n- Tồn kho (ước tính): 12\n- Mô tả: Apple iPhone 15 128GB.\n\nNếu bạn cần kiểm tra mã giảm giá hoặc tính phí ship theo thành phố, hãy xem thêm kết quả v2.",
+        "latency_ms": 3,
+        "steps": 2,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102909_173381",
+        "error_code": null,
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      },
+      "v2": {
+        "status": "error",
+        "answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+        "latency_ms": 1282,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102909_178123",
+        "error_code": "PROVIDER_ERROR",
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    },
+    {
+      "case_id": "case_4",
+      "title": "Kiểm hàng và tính giá",
+      "message": "MacBook Air M3 còn hàng không? Nếu mua 1 cái ship TP.HCM thì hết bao nhiêu?",
+      "expected": "Trả đúng stock, giá sản phẩm và chi phí ship.",
+      "expected_winner": "v2",
+      "actual_winner": "v1",
+      "v1": {
+        "status": "success",
+        "answer": "Thông tin MacBook Air M3:\n- Giá: 28,990,000 VND\n- Tồn kho (ước tính): 4\n- Mô tả: MacBook Air M3 13-inch.\n\nNếu bạn cần kiểm tra mã giảm giá hoặc tính phí ship theo thành phố, hãy xem thêm kết quả v2.",
+        "latency_ms": 0,
+        "steps": 2,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102910_462494",
+        "error_code": null,
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      },
+      "v2": {
+        "status": "error",
+        "answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+        "latency_ms": 1316,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102910_466340",
+        "error_code": "PROVIDER_ERROR",
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    },
+    {
+      "case_id": "case_5",
+      "title": "Edge case coupon sai",
+      "message": "Mua 3 AirPods Pro 2 dùng mã SAVE999 ship Đà Nẵng.",
+      "expected": "Phát hiện coupon sai, không bịa giảm giá, vẫn trả subtotal và shipping nếu có thể.",
+      "expected_winner": "v2",
+      "actual_winner": "v1",
+      "v1": {
+        "status": "success",
+        "answer": "Thông tin AirPods Pro 2:\n- Giá: 5,490,000 VND\n- Tồn kho (ước tính): 20\n- Mô tả: Apple AirPods Pro 2nd generation.\n\nNếu bạn cần kiểm tra mã giảm giá hoặc tính phí ship theo thành phố, hãy xem thêm kết quả v2.",
+        "latency_ms": 2,
+        "steps": 2,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102911_783221",
+        "error_code": null,
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      },
+      "v2": {
+        "status": "error",
+        "answer": "Hệ thống đang gặp trục trặc khi suy luận, vui lòng thử lại sau.",
+        "latency_ms": 1396,
+        "steps": 1,
+        "tool_calls_count": 0,
+        "trace_id": "trace_20260406_102911_786295",
+        "error_code": "PROVIDER_ERROR",
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    }
+  ],
+  "auxiliary_cases": [
+    {
+      "case_id": "aux_1",
+      "title": "Out-of-domain guard",
+      "message": "Thời tiết hôm nay thế nào?",
+      "expected": "Trả response blocked thân thiện, không gọi LLM/tool và gắn OUT_OF_DOMAIN.",
+      "expected_status": "blocked",
+      "expected_error_code": "OUT_OF_DOMAIN",
+      "matches_expectation": true,
+      "result": {
+        "status": "blocked",
+        "answer": "Tôi chỉ hỗ trợ câu hỏi liên quan đến cửa hàng điện tử trong bài lab này, ví dụ sản phẩm, giá, tồn kho, mã giảm giá, giao hàng, đổi trả hoặc bảo hành.",
+        "latency_ms": 0,
+        "steps": 0,
+        "tool_calls_count": 0,
+        "trace_id": "",
+        "error_code": "OUT_OF_DOMAIN",
+        "token_usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    }
+  ]
+}

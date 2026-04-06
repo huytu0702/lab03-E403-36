@@ -1,0 +1,35 @@
+{
+  "trace_id": "trace_20260406_094655_846776",
+  "version": "v1",
+  "session_id": "fixed2-case_1",
+  "user_query": "Chính sách đổi trả là gì?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "phase": "faq_lookup",
+      "thought": "Kiểm tra FAQ trước vì đây là đường trả lời rẻ và nhanh nhất của v1.",
+      "context_sources": [
+        "faq:return_policy"
+      ],
+      "decision": "faq_hit"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 9,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 0,
+    "token_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "cost_estimate": 0.0,
+    "llm_latency_ms": 0
+  },
+  "final_answer": "B?n c? th? ??i tr? trong v?ng 7 ng?y n?u s?n ph?m c?n nguy?n h?p v? ch?a k?ch ho?t b?o h?nh ?i?n t?.",
+  "error_code": null
+}

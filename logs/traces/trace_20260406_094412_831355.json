@@ -1,0 +1,58 @@
+{
+  "trace_id": "trace_20260406_094412_831355",
+  "version": "v2",
+  "session_id": "postfix-case_1",
+  "user_query": "Ch?nh s?ch ??i tr? l? g??",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 363,
+        "completion_tokens": 52,
+        "total_tokens": 415
+      },
+      "latency_ms": 2956,
+      "raw_model_output": "Thought: The user is asking about the return policy. I will use the FAQ tool to get a grounded answer regarding the return policy. \nAction: get_faq_answer\nAction Input: {\"user_message\": \"Chính sách đổi trả là gì?\"}",
+      "thought": "The user is asking about the return policy. I will use the FAQ tool to get a grounded answer regarding the return policy.",
+      "action": {
+        "tool": "get_faq_answer",
+        "args": {
+          "user_message": "Chính sách đổi trả là gì?"
+        }
+      },
+      "observation": {
+        "topic": "return_policy",
+        "question": "Ch?nh s?ch ??i tr? l? g??",
+        "answer": "B?n c? th? ??i tr? trong v?ng 7 ng?y n?u s?n ph?m c?n nguy?n h?p v? ch?a k?ch ho?t b?o h?nh ?i?n t?."
+      },
+      "status": "tool_success"
+    },
+    {
+      "step": 1.1,
+      "thought": "Đã đủ dữ liệu từ tools, tổng hợp câu trả lời trực tiếp từ observation.",
+      "action": null,
+      "observation": "B?n c? th? ??i tr? trong v?ng 7 ng?y n?u s?n ph?m c?n nguy?n h?p v? ch?a k?ch ho?t b?o h?nh ?i?n t?.",
+      "status": "auto_final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 2968,
+    "tool_calls_count": 1,
+    "steps": 2,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 363,
+      "completion_tokens": 52,
+      "total_tokens": 415
+    },
+    "cost_estimate": 0.00415,
+    "llm_latency_ms": 2956
+  },
+  "final_answer": "B?n c? th? ??i tr? trong v?ng 7 ng?y n?u s?n ph?m c?n nguy?n h?p v? ch?a k?ch ho?t b?o h?nh ?i?n t?.",
+  "error_code": null
+}

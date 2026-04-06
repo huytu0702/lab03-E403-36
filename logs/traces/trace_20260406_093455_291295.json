@@ -1,0 +1,42 @@
+{
+  "trace_id": "trace_20260406_093455_291295",
+  "version": "v2",
+  "session_id": "rerun-case_2",
+  "user_query": "Shop c? giao h?ng cu?i tu?n kh?ng?",
+  "status": "success",
+  "steps": [
+    {
+      "step": 1,
+      "provider": "openai",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 265,
+        "completion_tokens": 100,
+        "total_tokens": 365
+      },
+      "latency_ms": 3089,
+      "raw_model_output": "Thought: I need to check if shipping is available on weekends from Shop C. However, this is not a specific request for stock, coupon validation, or price details, so I currently lack the tools to directly check shipping policies. I'll respond based on typical e-commerce practices regarding weekend shipping. \n\nFinal Answer: Giao hàng cuối tuần thường tùy thuộc vào chính sách của từng cửa hàng. Bạn nên kiểm tra trực tiếp với Shop C để biết thông tin chi tiết về giao hàng cuối tuần.",
+      "thought": "I need to check if shipping is available on weekends from Shop C. However, this is not a specific request for stock, coupon validation, or price details, so I currently lack the tools to directly check shipping policies. I'll respond based on typical e-commerce practices regarding weekend shipping.",
+      "action": null,
+      "observation": "Giao hàng cuối tuần thường tùy thuộc vào chính sách của từng cửa hàng. Bạn nên kiểm tra trực tiếp với Shop C để biết thông tin chi tiết về giao hàng cuối tuần.",
+      "status": "final_answer"
+    }
+  ],
+  "metrics": {
+    "latency_ms": 3090,
+    "tool_calls_count": 0,
+    "steps": 1,
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "llm_calls": 1,
+    "token_usage": {
+      "prompt_tokens": 265,
+      "completion_tokens": 100,
+      "total_tokens": 365
+    },
+    "cost_estimate": 0.00365,
+    "llm_latency_ms": 3089
+  },
+  "final_answer": "Giao hàng cuối tuần thường tùy thuộc vào chính sách của từng cửa hàng. Bạn nên kiểm tra trực tiếp với Shop C để biết thông tin chi tiết về giao hàng cuối tuần.",
+  "error_code": null
+}
